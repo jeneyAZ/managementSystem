@@ -135,14 +135,11 @@ export default {
       height: 10px;
       border-radius: 50%;
       background-color: #37EC6B;
-      // background: url('~imgurl/logo.png') no-repeat center;
-      // background-size: 10px;
-      margin-left: 40px;
+      margin-left: 40px
     }
     .icon-right {
       width: 30px;
       height: 40px;
-      background: url('~imgurl/siginout.png') no-repeat center;
       background-size: 18px 18px;
       margin-left: 16px;
       margin-right: 40px;

@@ -392,19 +392,6 @@ export default {
     margin-left: 4px;
     z-index: 55;
   }
-  .pwdicon {
-    background: url("~@/assets/img/PCimg/log-pwd.png") center / 100% no-repeat;
-  }
-  .yzmicon {
-    background: url("~@/assets/img/PCimg/log-yzm.png") center / 100% no-repeat;
-  }
-  .eyeicon {
-    background: url("~@/assets/img/PCimg/log-by.png") center / 100% no-repeat;
-    right: 12px !important;
-  }
-  .eyeicon-zh {
-    background: url("~@/assets/img/PCimg/log-zy.png") center / 100% no-repeat;
-  }
   .yzmImg {
     position: absolute;
     height: 95%;

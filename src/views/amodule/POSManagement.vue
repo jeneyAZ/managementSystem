@@ -46,7 +46,7 @@
         :header-cell-style="{background:'#12223B',color:'#606266'}"
         align="center"
       >
-                                                                                                                                                                           
+
         <el-table-column prop="third_uid" label="机构ID" align="center" width="180px"></el-table-column>
         <el-table-column prop="contacts" label="联系人" align="center"></el-table-column>
         <el-table-column prop="tel" label="联系电话" align="center" width="200px"></el-table-column>
@@ -87,7 +87,6 @@
 
     <!-- 无数据 -->
     <div v-else class="nodata">
-      <img src="~imgurl/noData.png" alt />
     </div>
     <!-- 详情弹框 -->
     <el-dialog

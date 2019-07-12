@@ -167,8 +167,7 @@ export default {
 .meun-logo {
   height: 100px;
   background-color: #061220;
-  background: url("~imgurl/logo2.png") no-repeat center left 50px;
-  background-size: 100px 70px;
+  background-size: 100px 70px
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
@@ -195,61 +194,51 @@ a {
 
 .icon-item1 {
   padding-left: 24px;
-  background: url("~imgurl/amenu_icon1.png") no-repeat center left;
-  background-size: 18px 15px;
+  background-size: 18px 15px
 }
 
 .icon-item2 {
   padding-left: 24px;
-  background: url("~imgurl/amenu_icon2.png") no-repeat center left;
   background-size: 18px 15px;
 }
 
 .icon-item3 {
   padding-left: 24px;
-  background: url("~imgurl/amenu_icon3.png") no-repeat center left;
   background-size: 18px 15px;
 }
 
 .icon-item4 {
   padding-left: 24px;
-  background: url("~imgurl/amenu_icon4.png") no-repeat center left;
   background-size: 18px 15px;
 }
 
 .icon-item5 {
   padding-left: 24px;
-  background: url("~imgurl/amenu_icon5.png") no-repeat center left;
   background-size: 18px 15px;
 }
 
 .icon-item6 {
   padding-left: 24px;
-  background: url("~imgurl/amenu_icon6.png") no-repeat center left -1.5px;
   background-size: 18px 15px;
 }
 
 .icon-item7 {
   padding-left: 24px;
-  background: url("~imgurl/amenu_icon7.png") no-repeat center left;
   background-size: 18px 15px;
 }
 
 .icon-item8 {
   padding-left: 24px;
-  background: url("~imgurl/ameun_add.png") no-repeat center left;
   background-size: 17px 15px;
 }
 
 .icon-item9 {
   padding-left: 24px;
-  background: url("~imgurl/ameun_invite.png") no-repeat center left;
   background-size: 16px 15px;
 }
 
 .icon-item10 {
   padding-left: 24px;
-  background: url("~imgurl/ameun_perform.png") no-repeat center left;
   background-size: 16px 15px;
 }
 </style>
