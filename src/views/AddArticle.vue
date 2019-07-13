@@ -151,9 +151,15 @@ export default {
         onEditorReady(editor) { // 准备编辑器
 
         },
-        onEditorBlur(){}, // 失去焦点事件
-        onEditorFocus(){}, // 获得焦点事件
-        onEditorChange(){}, // 内容改变事件
+        onEditorBlur(val){
+            console.log(val, '失去焦点事件')
+        }, // 失去焦点事件
+        onEditorFocus(val){
+            console.log(val, '获得焦点事件')
+        }, // 获得焦点事件
+        onEditorChange(val){
+            console.log(val.html, '内容改变事件')
+        }, // 内容改变事件
         escapeStringHTML(str) {
             str = str.replace(/&lt;/g,'<');
             str = str.replace(/&gt;/g,'>');
