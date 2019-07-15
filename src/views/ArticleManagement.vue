@@ -184,4 +184,8 @@ export default {
  font-size: 14px;
  margin-right: 10px
 }
+.ivu-page{
+    text-align: right;
+    margin-right: 30px
+}
 </style>

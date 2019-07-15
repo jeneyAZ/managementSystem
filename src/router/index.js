@@ -39,6 +39,28 @@ export const asyncRoutes = {
         name: 'RecycleBin',
         component: () => import('../views/RecycleBin.vue')
     },
+    'AppealManagement': {
+        path: 'AppealManagement',
+        name: 'AppealManagement',
+        component: () => import('../views/AppealManagement.vue')
+    },
+    'CommentManagement': {
+        path: 'CommentManagement',
+        name: 'CommentManagement',
+        component: () => import('../views/CommentManagement.vue')
+    },
+    'AdvertManagement': {
+        path: 'AdvertManagement',
+        name: 'AdvertManagement',
+        component: () => import('../views/AdvertManagement.vue')
+    },
+    'AddAdvert': {
+        path: 'AddAdvert',
+        name: 'AddAdvert',
+        component: () => import('../views/AddAdvert.vue')
+    },
+
+
     'password': {
         path: 'password',
         name: 'password',

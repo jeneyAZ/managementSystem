@@ -38,6 +38,39 @@ const store = new Vuex.Store({
                         text: '回收站'
                     },
                 ]
+            },
+            {
+                text: '投诉管理',
+                type: 'ios-paper',
+                children: [{
+                        type: 'ios-grid',
+                        name: 'AppealManagement',
+                        text: '信息管理'
+                    }
+                ]
+            },
+            {
+                text: '评论管理',
+                type: 'ios-paper',
+                children: [{
+                    type: 'ios-grid',
+                    name: 'CommentManagement',
+                    text: '信息管理'
+                }]
+            },
+            {
+                text: '广告管理',
+                type: 'ios-paper',
+                children: [{
+                    type: 'ios-grid',
+                    name: 'AdvertManagement',
+                    text: '管理广告'
+                },
+                {
+                    type: 'ios-grid',
+                    name: 'AddAdvert',
+                    text: '添加广告'
+                }]
             }
         ],
     },
