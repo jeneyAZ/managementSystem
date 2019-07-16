@@ -1,16 +1,11 @@
 <template>
     <div>
         <i-form :model="formItem" :label-width="80">
-            <Form-item label="所属分类：">
-                <i-select :model.sync="model" style="width:100px" @on-change='handleSelectKind($event)' placeholder="请选择分类">
-                    <i-option v-for="item in kindList" :value="item.value">{{item.label}}</i-option>
-                </i-select>
-            </Form-item>
-            <Form-item label="信息标题：">
-                <i-input :value.sync="formItem.title" placeholder="请输入信息标题"></i-input>
+            <Form-item label="标题：">
+                <i-input :value.sync="formItem.title" placeholder="请输入广告标题"></i-input>
             </Form-item>
             <Form-item label="图片">
-                <i-input :value.sync="formItem.imgurl" readonly style="width:60%"></i-input>
+                <i-input :value.sync="formItem.imgurl" readonly style="width:60%" placeholder="点击上传文件"></i-input>
                 <template>
                     <div class="file">点击选择上传文件
                         <input type="file" id="fileId" placeholder="点击上传文件" @change="uploadFile($event)">
@@ -18,39 +13,19 @@
                     </div>
                 </template>
             </Form-item>
-            <Form-item label="添加时间：">
-                <row>
-                     <i-col span="12">
-                         <Date-picker type="date" :value.sync='formItem.time' placeholder="选择日期" style="width: 200px" @on-change="getDate($event)"></Date-picker>
-                     </i-col>
-                </row>
+             <Form-item label="网址：">
+                <i-input :value.sync="formItem.address" placeholder="请输入网址"></i-input>
             </Form-item>
-            <div class="edit_container">
-               <quill-editor
-                    v-model="content"
-                        ref="myQuillEditor"
-                        :options="editorOption"
-                        @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
-                        @change="onEditorChange($event)">
-                    </quill-editor>
-                <div v-html="str" class="ql-editor">{{str}}</div>
-            </div>
-            <Form-item label="浏览量：">
-                <i-input :value.sync="Browsing" readonly></i-input>
+             <Form-item label="备注：">
+                <i-input :value.sync="formItem.remark" placeholder="请输入备注信息"></i-input>
             </Form-item>
-            <Form-item label="点赞量：">
-                <i-input :value.sync="Browsing" readonly></i-input>
-            </Form-item>
-            <Form-item label="属性标记：">
-                <Radio-group :model.sync="value" @on-change="xxx($event)">
-                    <Radio v-for="(item, index) in radioList" :label="item.value" :key="index">{{item.label}}</Radio>
-                    <!-- <Radio ref="radio0" value="0">推荐</Radio>
-                    <Radio ref="radio1" value="1">原创</Radio>
-                    <Radio ref="radio2" value="2">回收站</Radio> -->
-                </Radio-group>
+            <Form-item label="类型：">
+                <i-select :model.sync="model" style="width:150px" @on-change='handleSelectKind($event)' placeholder="请选择广告类型">
+                    <i-option v-for="item in kindList" :value="item.value">{{item.label}}</i-option>
+                </i-select>
             </Form-item>
             <Form-item>
-                <i-button type="primary" size="large" @click="submit()">提交</i-button>
+                <i-button type="primary" size="large" @click="submit()">确定</i-button>
             </Form-item>
         </i-form>
     </div>
@@ -69,41 +44,23 @@ export default {
     data() {
         return {
             model: '',
+            // 类型选择
             kindList: [
                 {
                     value: 1,
-                    label: '科幻'
+                    label: '首页广告'
                 },
                 {
                     value: 2,
-                    label: '恐怖'
-                }
-            ], // 类型选择
-            formItem: {
-                title: '',
-                time: '',
-                imgurl: ''
-            },
-            // 文本编辑
-            content: '',
-            editorOption: {},
-            str: '',
-            // 浏览量
-            Browsing: '',
-            zan: '',
-            radioList: [
-                {
-                  label: '推荐',
-                  value: '0'
-                }, {
-                  label: '原创',
-                  value: '1'
-                }, {
-                  label: '回收站',
-                  value: '2'
+                    label: '内页广告'
                 }
             ],
-            value: 0
+            formItem: {
+                title: '',
+                address: '',
+                remark: '',
+                imgurl: ''
+            }
         }
     },
     created() {
@@ -118,18 +75,9 @@ export default {
         }
     },
     methods: {
-        xxx (val) {
-            console.log(val, 'az')
-            this.value = val
-        },
         // 类型选择触发
         handleSelectKind (val) {
             console.log(val)
-        },
-        // 日期选择
-        getDate (val) {
-            this.formItem.time = val
-            console.log(this.formItem.time)
         },
         // 文件上传
         uploadFile (event, i) {
@@ -150,35 +98,8 @@ export default {
               this.$toast(e.msg)
             })
         },
-        // 富文本
-        onEditorReady(editor) { // 准备编辑器
-
-        },
-        onEditorBlur(val){
-            console.log(val, '失去焦点事件')
-        }, // 失去焦点事件
-        onEditorFocus(val){
-            console.log(val, '获得焦点事件')
-        }, // 获得焦点事件
-        onEditorChange(val){
-            console.log(val.html, '内容改变事件')
-        }, // 内容改变事件
-        escapeStringHTML(str) {
-            str = str.replace(/&lt;/g,'<');
-            str = str.replace(/&gt;/g,'>');
-            return str;
-        },
         // 获取列表数据
         getOrderData () {}
-    },
-    mounted() {
-        let content = '';  // 请求后台返回的内容字符串
-        this.str = this.escapeStringHTML(content);
-    },
-    computed: {
-        editor() {
-            return this.$refs.myQuillEditor.quill;
-        },
     }
 }
 </script>
