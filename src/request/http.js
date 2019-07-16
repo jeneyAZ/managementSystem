@@ -32,8 +32,7 @@ axios.interceptors.request.use(config => {
   return config;
 }, (error) => {
   return Promise.reject(error);
-});
-
+  });
 
 // 响应拦截器
 axios.interceptors.response.use(response => {
@@ -57,8 +56,7 @@ axios.interceptors.response.use(response => {
   return response;
 }, error => {
   return Promise.reject(error);
-});
-
+})
 // get方法
 export function getHttp(url, params = {}) {
   return new Promise((resolve, reject) => {

@@ -9,7 +9,14 @@ const commonRoutes = [
         name: 'login',
         component: () => import('../components/Login.vue')
     },
-    {path: '/', redirect: '/home'},
+
+    {
+        path: '/browsePage',
+        name: 'browsePage',
+        component: () => import('../views/BrowsePage.vue')
+    },
+
+    { path: '/', redirect: '/home'},
 ]
 
 // 需要通过后台数据来生成的组件
@@ -59,7 +66,6 @@ export const asyncRoutes = {
         name: 'AddAdvert',
         component: () => import('../views/AddAdvert.vue')
     },
-
 
     'password': {
         path: 'password',

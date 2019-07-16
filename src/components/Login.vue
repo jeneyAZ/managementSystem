@@ -8,7 +8,7 @@
             <div class="input-c az-pa">
                 <Input type="password" v-model="pwd" prefix="md-lock" placeholder="密码" clearable/>
             </div>
-            <Button :loading="isShowLoading" class="submit" type="primary" @click="submit()">登陆</Button>
+            <Button :loading="isShowLoading" class="submit" type="primary" @click="submit()">登录</Button>
             <!-- <p class="account"><span @click="register">注册账号</span> | <span @click="forgetPwd">忘记密码</span></p> -->
         </div>
     </div>
@@ -51,6 +51,7 @@ export default {
                 localStorage.setItem('userName', '小明')
                 // 登陆成功 假设这里是后台返回的 token
                 localStorage.setItem('token', 'i_am_token')
+                console.log(this.redirect)
                 this.$router.push({path: this.redirect || '/'})
             }
         }
