@@ -10,12 +10,6 @@ const commonRoutes = [
         component: () => import('../components/Login.vue')
     },
 
-    {
-        path: '/browsePage',
-        name: 'browsePage',
-        component: () => import('../views/BrowsePage.vue')
-    },
-
     { path: '/', redirect: '/home'},
 ]
 
