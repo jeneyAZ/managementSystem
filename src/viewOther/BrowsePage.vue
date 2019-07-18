@@ -10,7 +10,10 @@
             <div class="opration">
                 <div class="comm">
                     <Icon type="ios-chatbubble"></Icon>
-                    <span>评论</span>
+                    <span @click="handleC()">评论</span>
+                    <div v-if="isShowC" class="commBox">
+                         <i-input type="textarea" v-model="commentText" :rows="4" placeholder="请输入..."></i-input>
+                    </div>
                 </div>
                 <div class="zan">
                     <Icon type="thumbsup">点赞</Icon>
@@ -61,10 +64,16 @@
      data() {
          return {
              title: '你认识萌萌的小熊猫吗',
-             time: '2019-7-18'
+             time: '2019-7-18',
+             commentText: '',
+             isShowC: false
          }
      },
      methods: {
+         handleC () {
+             console.log(45)
+             this.isShowC = !this.isShowC
+         }
      },
  }
  </script>
@@ -112,6 +121,9 @@
     color: #757575;
     border-bottom: 20px solid #ececec;
     padding: 10px 7px
+}
+.opration .commBox{
+    padding-top: 10px
 }
 .comment{
     border-bottom: 20px solid #ececec;

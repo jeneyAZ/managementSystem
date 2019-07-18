@@ -1,13 +1,17 @@
 import router from './router'
 import store from './store'
-import { menusToRoutes } from './utils'
+import {
+    menusToRoutes
+} from './utils'
 
 // 是否有菜单数据
 let hasMenus = false
 router.beforeEach(async (to, from, next) => {
     if (localStorage.getItem('token')) {
         if (to.path === '/login') {
-            next({path: '/'})
+            next({
+                path: '/'
+            })
         } else {
             if (hasMenus) {
                 next()
@@ -18,7 +22,9 @@ router.beforeEach(async (to, from, next) => {
                     // 动态添加路由
                     router.addRoutes(routes)
                     hasMenus = true
-                    next({path: to.path || '/'})
+                    next({
+                        path: to.path || '/'
+                    })
                 } catch (error) {
                     next(`/login?redirect=${to.path}`)
                 }
