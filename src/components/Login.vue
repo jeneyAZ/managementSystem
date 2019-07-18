@@ -51,8 +51,9 @@ export default {
                 localStorage.setItem('userName', '小明')
                 // 登陆成功 假设这里是后台返回的 token
                 localStorage.setItem('token', 'i_am_token')
-                console.log(this.redirect)
-                this.$router.push({path: this.redirect || '/'})
+                // console.log(this.redirect)
+                // this.$router.push({path: this.redirect || '/'})
+                this.$router.push({path: '/index'})
             }
         }
     }

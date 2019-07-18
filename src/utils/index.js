@@ -6,7 +6,7 @@ export function menusToRoutes(data) {
     const children = []
 
     result.push({
-        path: '/',
+        path: '/Index',
         component: () => import('../components/Index.vue'),
         children,
     })

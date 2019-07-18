@@ -5,12 +5,17 @@ Vue.use(Router)
 
 const commonRoutes = [
     {
-        path: '/login',
+        path: '/',
         name: 'login',
         component: () => import('../components/Login.vue')
     },
+    {
+        path: '/browsePage',
+        name: 'BrowsePage',
+        component: () => import('../viewOther/BrowsePage.vue')
+    },
 
-    { path: '/', redirect: '/home'},
+    { path: '/', redirect: '/Index'},
 ]
 
 // 需要通过后台数据来生成的组件
