@@ -370,8 +370,8 @@ export default {
                 }
             } else {
                 // 如果没有标签则跳往首页
-                if (name != 'home') {
-                    this.gotoPage('home')
+                if (name != 'ClassifiedManagement') {
+                    this.gotoPage('ClassifiedManagement')
                 } else {
                     this.reloadPage()
                 }

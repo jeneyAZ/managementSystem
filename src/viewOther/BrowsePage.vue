@@ -13,6 +13,7 @@
                     <span @click="handleC()">评论</span>
                     <div v-if="isShowC" class="commBox">
                          <i-input type="textarea" v-model="commentText" :rows="4" placeholder="请输入..."></i-input>
+                         <span @click="handleC()">提交</span>
                     </div>
                 </div>
                 <div class="zan">
@@ -124,6 +125,13 @@
 }
 .opration .commBox{
     padding-top: 10px
+}
+.opration .commBox span{
+    display: inline-block;
+    margin-top: 10px;
+    border: 1px solid #ececec;
+    border-radius: 2px;
+    width: 30px
 }
 .comment{
     border-bottom: 20px solid #ececec;

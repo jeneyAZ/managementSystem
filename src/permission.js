@@ -26,7 +26,7 @@ router.beforeEach(async (to, from, next) => {
                         path: to.path || '/'
                     })
                 } catch (error) {
-                    next(`/login?redirect=${to.path}`)
+                    next(`/login`)
                 }
             }
         }
@@ -35,7 +35,7 @@ router.beforeEach(async (to, from, next) => {
         if (to.path === '/login') {
             next()
         } else {
-            next(`/login?redirect=${to.path}`)
+            next(`/login`)
         }
     }
 })

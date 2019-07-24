@@ -54,7 +54,7 @@ export default {
                 localStorage.setItem('token', 'i_am_token')
                 // console.log(this.redirect)
                 // this.$router.push({path: this.redirect || '/'})
-                this.$router.push({path: '/index'})
+                this.$router.push({path: '/ClassifiedManagement'})
             }
         }
     }
