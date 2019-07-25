@@ -14,10 +14,10 @@
             <el-input size="small" v-model="articleCategoryId" placeholder="请输入文章ID" style="width: auto;margin:0 10px"></el-input>
             <el-button size="small" type="primary" @click="getOrderData()">查询</el-button>
         </div>
-        <!-- <div class="az-p">
+        <div class="az-p">
             <span>全选/不全选</span>
             <i-button type="error"  @click="handleSearch()">删除所选</i-button>
-        </div> -->
+        </div>
         <br>
          <el-table
             ref="multipleTable"
