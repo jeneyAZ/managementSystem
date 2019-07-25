@@ -6,9 +6,12 @@ import iView from 'iview'
 import axios from 'axios'
 import 'iview/dist/styles/iview.css'
 import './permission'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false
 Vue.use(iView)
+Vue.use(ElementUI)
 
 import { getHttp, postHttp } from './request/http'
 Vue.prototype.$get=getHttp

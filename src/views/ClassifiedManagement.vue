@@ -6,7 +6,19 @@
             <i-button type="primary"  @click="handleAdd()">添加</i-button>
         </div>
         <br>
-        <i-table  border stripe  :columns="columns" :data="dataList"></i-table>
+         <el-table
+          :data="dataList"
+          style="width: 100%">
+            <el-table-column prop="id" label="ID"></el-table-column>
+            <el-table-column prop="name" label="类别名称"></el-table-column>
+            <el-table-column prop="sortNumber" label="排序"></el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button @click="open(scope.row.id)" type="text" size="small">编辑</el-button>
+                    <el-button style="color:red" @click="handleDel(scope.row.id)" type="text" size="small">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
         <br>
         <Page :total="total"  show-sizer show-elevator @on-change='handleCurrentPage($event)' @on-page-size-change='handlePageSize($event)'/>
     </div>
@@ -17,58 +29,11 @@ export default {
     name: 'ClassifiedManagement',
     data() {
         return {
-            self: this,
-            columns: [
-                {
-                    title: 'ID',
-                    key: 'id'
-                },
-                {
-                    title: '类别名称',
-                    key: 'name'
-                },
-                {
-                    title: '排序',
-                    key: 'sortNumber'
-                },
-                {
-                    title: '操作',
-                    width: 150,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('span', [
-                            h('span',
-                                {
-                                    style:{color:'blue', cursor: 'pointer'},
-                                    on: {
-                                        click () {
-                                            console.log(params.row)
-                                        }
-                                    }
-                                }, '修改'
-                            ),
-                            h('span',
-                                {
-                                    style:{color: 'red', marginLeft: '20px', cursor: 'pointer'},
-                                    on: {
-                                        click () {
-                                            console.log(params.row.id)
-                                            console.log(self, 'az')
-                                            // self.handleDel(params.row.id)
-                                        }
-                                    }
-                                }, '删除'
-                            )
-                        ])
-                    }
-                }
-            ],
             dataList: [],
             total: null,
             pageSize: 10,
             currentPage: 1,
             addKind: ''
-
         }
     },
     created() {
@@ -99,13 +64,11 @@ export default {
                    this.$Message.warning(res.message)
                }
             })
-
         },
         // 添加文章分类
         handleAdd () {
            this.$post("/admin/article_category/add?name="+this.addKind).then(res => {
                if (res.code == "SUCC") {
-                   console.log(res)
                    this.getOrderData()
                    this.$Message.success(res.message)
                } else {
@@ -119,8 +82,7 @@ export default {
         },
         // 删除文章分类
         handleDel (id) {
-           this.$post("/admin/article_category/delete?ids"+id).then(res => {
-               console.log(res)
+           this.$post("/admin/article_category/delete?ids="+id).then(res => {
                if (res.code == "SUCC") {
                    this.getOrderData()
                    this.$Message.success(res.message)
@@ -132,12 +94,33 @@ export default {
 		    })
         },
         // 修改文章分类
-        handleDel (id) {
+        open(id) {
+            this.$prompt('请输入修改分类名称', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+            }).then(({ value }) => {
+                this.updateName = value
+                this.handleUpdata(id)
+                // this.$message({
+                //     type: 'success',
+                //     message: '你的邮箱是: ' + value
+                // })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '取消输入'
+                })      
+            })
+        },
+        handleUpdata (id) {
             var data = {
                 id: id,
-                name: this.updateName
+                name: this.updateName,
+                sortNumber: 0,
+                status: 1
             }
-           this.$post("/admin/article_category/update", data).then(res => {
+           this.$post("/admin/article_category/update?id="+id+"&name="+this.updateName+"&sortNumber=0&status=1").then(res => {
+            // this.$post("/admin/article_category/update", data).then(res => {
                console.log(res)
                if (res.code == "SUCC") {
                    this.getOrderData()
@@ -149,7 +132,7 @@ export default {
 		    .catch(req => {
 		    })
         }
-    },
+    }
 }
 </script>
 
