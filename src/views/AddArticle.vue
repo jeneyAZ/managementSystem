@@ -107,7 +107,7 @@ export default {
         }
     },
     created() {
-        this.getOrderData()
+        this.addArticle()
         switch (this.value) {
             case 0:
 
@@ -168,8 +168,19 @@ export default {
             str = str.replace(/&gt;/g,'>');
             return str;
         },
-        // 获取列表数据
-        getOrderData () {}
+        // 添加文章
+        addArticle () {
+            this.$post("/admin/article/add").then(res => {
+                console.log(res)
+               if (res.code == "SUCC") {
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        }
     },
     mounted() {
         let content = '';  // 请求后台返回的内容字符串

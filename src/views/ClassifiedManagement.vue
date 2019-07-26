@@ -60,6 +60,9 @@ export default {
                     var res = res.result
                     this.total = res.total
                     this.dataList = res.data
+                    this.dataList.forEach(ele => {
+                        console.log(ele)
+                    });
                 } else {
                    this.$Message.warning(res.message)
                }
@@ -76,9 +79,7 @@ export default {
                }
 		    })
 		    .catch(req => {
-		    });
-
-
+		    })
         },
         // 删除文章分类
         handleDel (id) {
@@ -109,7 +110,7 @@ export default {
                 this.$message({
                     type: 'info',
                     message: '取消输入'
-                })      
+                })
             })
         },
         handleUpdata (id) {
