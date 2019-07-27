@@ -6,7 +6,7 @@ import axios from 'axios'
 import router from '../router'
 
 let baseUrl = 'http://47.96.237.188:8787';
-// let baseUrl = 'http://192.168.100.3:8080'; //测试用
+// let baseUrl = 'http://192.168.100.20:39000'; //测试用
 
 // if (process.env.NODE_ENV == 'development') {
 //     baseUrl = '/api';

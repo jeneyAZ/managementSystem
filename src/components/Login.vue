@@ -44,6 +44,21 @@ export default {
             console.log('忘记密码')
         },
         submit() {
+            // var data = {
+            //      "username":this.account,
+            //      "password":this.pwd
+            // }
+            // console.log(data)
+            // this.$post("/sys-user/login",data).then(res => {
+            //     console.log(res)
+            //    if (res.code == "SUCC") {
+            //        this.$Message.success(res.message)
+            //    } else {
+            //        this.$Message.warning(res.message)
+            //    }
+		    // })
+		    // .catch(req => {
+		    // })
             if (this.account === 'admin' && this.pwd === '123456') {
                 this.isShowLoading = true
                 // 登陆成功 设置用户信息
