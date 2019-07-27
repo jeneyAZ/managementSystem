@@ -56,6 +56,11 @@ const store = new Vuex.Store({
                     type: 'ios-grid',
                     name: 'CommentManagement',
                     text: '信息管理'
+                },
+                {
+                    type: '',
+                    name: 'CommentDetail',
+                    text: ''
                 }]
             },
             {

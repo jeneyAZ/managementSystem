@@ -9,7 +9,7 @@
             <Form-item label="信息标题：">
                 <i-input :value.sync="formItem.title" placeholder="请输入信息标题"></i-input>
             </Form-item>
-            <Form-item label="图片">
+            <Form-item label="图片：">
                 <i-input :value.sync="formItem.imgurl" readonly style="width:60%"></i-input>
                 <template>
                     <div class="file">点击选择上传文件
@@ -44,9 +44,6 @@
             <Form-item label="属性标记：">
                 <Radio-group :model.sync="value" @on-change="xxx($event)">
                     <Radio v-for="(item, index) in radioList" :label="item.value" :key="index">{{item.label}}</Radio>
-                    <!-- <Radio ref="radio0" value="0">推荐</Radio>
-                    <Radio ref="radio1" value="1">原创</Radio>
-                    <Radio ref="radio2" value="2">回收站</Radio> -->
                 </Radio-group>
             </Form-item>
             <Form-item>
@@ -170,7 +167,44 @@ export default {
         },
         // 添加文章
         addArticle () {
+            var data = {
+                "articleCategoryId": 0,
+                "browseTimes": 0,
+                "content": "string",
+                "id": 0,
+                "praiseTimes": 0,
+                "sortNumber": 0,
+                "status": 0,
+                "tagIds": "string",
+                "thumbnailUrl": "string",
+                "title": "string"
+            }
             this.$post("/admin/article/add").then(res => {
+                console.log(res)
+               if (res.code == "SUCC") {
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+        // 修改文章
+        resetArticle () {
+            var data = {
+                "articleCategoryId": 0,
+                "browseTimes": 0,
+                "content": "string",
+                "id": 0,
+                "praiseTimes": 0,
+                "sortNumber": 0,
+                "status": 0,
+                "tagIds": "string",
+                "thumbnailUrl": "string",
+                "title": "string"
+            }
+            this.$post("/admin/article/update").then(res => {
                 console.log(res)
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)

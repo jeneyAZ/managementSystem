@@ -20,7 +20,7 @@ const commonRoutes = [
         component: () => import('../viewOther/BrowsePage.vue')
     },
     {
-        path: '/indexBrowse',     
+        path: '/indexBrowse',
         name: 'IndexBrowse',
         component: () => import('../viewOther/IndexBrowse.vue')
     },
@@ -70,6 +70,11 @@ export const asyncRoutes = {
         path: '/CommentManagement',
         name: 'CommentManagement',
         component: () => import('../views/CommentManagement.vue')
+    },
+    'CommentDetail': {
+        path: '/CommentDetail',
+        name: 'CommentDetail',
+        component: () => import('../views/CommentDetail.vue')
     },
     'AdvertManagement': {
         path: '/AdvertManagement',
