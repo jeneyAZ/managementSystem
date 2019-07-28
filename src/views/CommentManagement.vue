@@ -39,17 +39,6 @@ export default {
   name: "ArticleManagement",
   data() {
     return {
-      dialogVisible: false,
-      kindList: [
-        {
-          value: 1,
-          label: "科幻"
-        },
-        {
-          value: 2,
-          label: "恐怖"
-        }
-      ],
       dataList: [],
       total: null,
       pageSize: 10,
@@ -101,7 +90,9 @@ export default {
     open(id) {
         this.$router.push({
             path: '/CommentDetail',
-            query: id
+            query: {
+              id: id
+            }
         })
     }
   }

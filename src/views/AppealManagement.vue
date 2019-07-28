@@ -7,22 +7,11 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column prop="id" label="评论内容"></el-table-column>
-      <el-table-column prop="title" label="文章标题"></el-table-column>
-      <el-table-column prop="nickname" label="昵称"></el-table-column>
-      <el-table-column label="头像">
-        <template slot-scope="scope">
-            <img :src="scope.row.portraitUrl" alt="">
-        </template>
-      </el-table-column>
-      <el-table-column prop="status" label="状态"></el-table-column>
+      <el-table-column prop="id" label="ID"></el-table-column>
+      <el-table-column prop="createTime" label="时间"></el-table-column>
+      <el-table-column prop="userName" label="昵称"></el-table-column>
+      <el-table-column prop="statusMemo" label="状态"></el-table-column>
       <el-table-column prop="createTime" label="日期"></el-table-column>
-      <el-table-column label="操作" width="120">
-        <template slot-scope="scope">
-          <el-button @click="open(scope.row.id)" type="text" size="small">编辑</el-button>
-          <!-- <el-button style="color:red" @click="handleDel(scope.row.id)" type="text" size="small">删除</el-button> -->
-        </template>
-      </el-table-column>
     </el-table>
     <br />
     <Page
@@ -89,7 +78,7 @@ export default {
         pageSize: this.pageSize,
         pageNum: this.currentPage
       };
-      this.$get("/admin/article_comment/getList", data).then(res => {
+      this.$get("/admin/article_complaint/getList", data).then(res => {
         if (res.code == "SUCC") {
           var res = res.result;
           this.total = res.total;

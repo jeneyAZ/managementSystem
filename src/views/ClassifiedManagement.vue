@@ -60,9 +60,7 @@ export default {
                     var res = res.result
                     this.total = res.total
                     this.dataList = res.data
-                    this.dataList.forEach(ele => {
-                        console.log(ele)
-                    });
+                    localStorage.setItem('kindTxt', JSON.stringify(res.data))
                 } else {
                    this.$Message.warning(res.message)
                }

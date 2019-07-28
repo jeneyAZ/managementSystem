@@ -1,191 +1,200 @@
 <template>
-    <div>
-        <div class="query-c">
-            <i-select :model.sync="model" style="width:100px" @on-change='handleSelectKind($event)'>
-                <i-option v-for="item in kindList" :value="item.value">{{ item.label }}</i-option>
-            </i-select>
-            <Input placeholder="请输入ID" style="width: auto; margin:10px" />
-            <i-button type="primary"  @click="handleSearch()">查询</i-button>
-        </div>
-        <div class="az-p">
-            <span>全选/不全选</span>
-            <i-button type="error"  @click="handleSearch()">删除所选</i-button>
-        </div>
-        <br>
-        <Table border stripe  :columns="columns" :data="dataList" @on-select='handleSelect($event)' @on-select-all='handleSelectAll($event)'></Table>
-        <br>
-        <Page :total="total"  show-sizer show-elevator @on-change='handleCurrentPage($event)' @on-page-size-change='handlePageSize($event)'/>
+  <div>
+    <div class="query-c">
+      <el-date-picker
+        size="small"
+        type="date"
+        placeholder="选择开始日期"
+        value-format="yyyy-MM-dd"
+        v-model="startTime"
+        style="width: 200px"
+      ></el-date-picker>
+      <el-date-picker
+        size="small"
+        type="date"
+        placeholder="选择结束日期"
+        value-format="yyyy-MM-dd"
+        v-model="endTime"
+        style="width: 200px;margin:0 10px"
+      ></el-date-picker>
+      <el-select size="small" v-model="value" placeholder="请选择文章类型">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+      <el-input
+        size="small"
+        v-model="keywords"
+        placeholder="请输入文章关键字"
+        style="width: auto;margin:0 10px"
+      ></el-input>
+      <el-button size="small" type="primary" @click="getOrderData()">查询</el-button>
     </div>
+    <div class="az-p">
+      <span>全选/不全选</span>
+      <el-button size="small" type="danger" @click="handleDel(ids)">删除所选</el-button>
+      <el-button size="small" type="primary" @click="handleReset(ids)">恢复所选</el-button>
+    </div>
+    <br />
+    <el-table
+      ref="multipleTable"
+      :data="dataList"
+      tooltip-effect="dark"
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column prop="id" label="ID"></el-table-column>
+      <el-table-column prop="title" label="信息名称"></el-table-column>
+      <el-table-column prop="categoryName" label="所属分类"></el-table-column>
+      <el-table-column prop="发表时间" label="发表时间"></el-table-column>
+      <el-table-column label="操作" width="120">
+        <template slot-scope="scope">
+          <el-button @click="handleReset(scope.row.id)" type="text" size="small">恢复</el-button>
+          <el-button style="color:red" @click="handleDel(scope.row.id)" type="text" size="small">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <br />
+    <Page
+      :total="total"
+      show-sizer
+      show-elevator
+      @on-change="handleCurrentPage($event)"
+      @on-page-size-change="handlePageSize($event)"
+    />
+  </div>
 </template>
 
 <script>
 export default {
-    name: 't1',
-    data() {
-        return {
-            kindList: [
-                {
-                    value: 1,
-                    label: '科幻'
-                },
-                {
-                    value: 2,
-                    label: '恐怖'
-                }
-            ],
-            model: '',
-            columns: [
-                {
-                    type: 'selection',
-                    width: 60,
-                    align: 'center'
-                },
-                {
-                    title: 'ID',
-                    key: 'id'
-                },
-                {
-                    title: '信息名称',
-                    key: 'name'
-                },
-                {
-                    title: '所属分类',
-                    key: 'rank'
-                },
-                {
-                    title: '操作',
-                    width: 250,
-                    align: 'center',
-                    render (h, params) {
-                        return h('span', [
-                            h('span',
-                                {
-                                    style:{color:'blue', cursor: 'pointer'},
-                                    on: {
-                                        click: () => {
-                                            console.log(params.row)
-                                        }
-                                    }
-                                }, '恢复'
-                            ),
-                            h('span',
-                                {
-                                    style:{color: 'red', marginLeft: '20px', cursor: 'pointer'},
-                                    on: {
-                                        click: () => {
-                                            console.log(params.row)
-                                        }
-                                    }
-                                }, '删除'
-                            )
-                        ])
-                    }
-                }
-            ],
-            dataList: [
-                {
-                    id: 1,
-                    name: 'jeneny',
-                    rank: 1
-                },
-                {
-                    id: 2,
-                    name: 'az',
-                    rank: 2
-                },
-                {
-                    id: 3,
-                    name: 'jeneybu',
-                    rank: 3
-                },
-                {
-                    id: 3,
-                    name: 'jeneybu',
-                    rank: 4
-                },
-                {
-                    id: 3,
-                    name: 'jeneybu',
-                    rank: 5
-                },
-                {
-                    id: 3,
-                    name: 'jeneybu',
-                    rank: 6
-                },
-                {
-                    id: 3,
-                    name: 'jeneybu',
-                    rank: 7
-                },
-                {
-                    id: 3,
-                    name: 'jeneybu',
-                    rank: 8
-                },
-                {
-                    id: 3,
-                    name: 'jeneybu',
-                    rank: 9
-                },
-                {
-                    id: 3,
-                    name: 'jeneybu',
-                    rank: 10
-                },
-                {
-                    id: 3,
-                    name: 'jeneybu',
-                    rank: 11
-                }
-            ],
-            total: null,
-            pageSize: 10,
-            currentPage: 1
+  name: "ArticleManagement",
+  data() {
+    return {
+      options: [
+        {
+          value: 1,
+          label: "科幻"
+        },
+        {
+          value: 2,
+          label: "恐怖"
         }
+      ],
+      value: "",
+      dataList: [],
+      total: null,
+      pageSize: 10,
+      currentPage: 1,
+      keywords: "",
+      endTime: "",
+      startTime: "",
+      selectArr: [],
+      ids: ''
+    };
+  },
+  created() {
+    this.getOrderData();
+  },
+  methods: {
+    open (id) {
+      this.$router.push({
+        path: '/AddArticle',
+        query: {
+          id: id
+        }
+      })
     },
-    created() {
-        this.getOrderData()
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
     },
-    methods: {
-        // 类型选择触发
-        handleSelectKind (val) {
-            console.log(val)
-        },
-        // 单选触发
-        handleSelect (val) {
-            console.log(val)
-        },
-        // 全选触发
-        handleSelectAll (val) {
-            console.log(val)
-        },
-        // 切换页面触发
-        handleCurrentPage (val) {
-            console.log(val, 'currentPage')
-        },
-        // 切换pageSize触发
-        handlePageSize (val) {
-            console.log(val, 'pageSize')
-        },
-        // 查询数据触发
-        handleSearch () {},
-        // 获取列表数据
-        getOrderData () {}
+    handleSelectionChange(val) {
+      this.selectArr = []
+      for (let index = 0; index < val.length; index++) {
+        const ele = val[index].id
+        this.selectArr[index] = ele
+      }
+      this.ids = this.selectArr.join(",")
     },
-}
+    // 切换页面触发
+    handleCurrentPage(val) {
+      this.currentPage = val;
+      this.getOrderData();
+    },
+    // 切换pageSize触发
+    handlePageSize(val) {
+      this.pageSize = val;
+      this.getOrderData();
+    },
+    // 获取列表数据
+    getOrderData() {
+      var data = {
+        pageSize: this.pageSize,
+        pageNum: this.currentPage,
+        keywords: this.keywords,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        isDelete: true
+      };
+      this.$get("/admin/article/getList", data).then(res => {
+        if (res.code == "SUCC") {
+          var res = res.result;
+          this.total = res.total;
+          this.dataList = res.data;
+        } else {
+          this.$Message.warning(res.message);
+        }
+      });
+    },
+    // 删除文章
+    handleDel(id) {
+      this.$post("/admin/article/delete?ids=" + id)
+        .then(res => {
+          if (res.code == "SUCC") {
+            this.getOrderData();
+            this.$Message.success(res.message);
+          } else {
+            this.$Message.warning(res.message);
+          }
+        })
+        .catch(req => {});
+    },
+     // 恢复文章
+    handleReset(id) {
+      this.$post("/admin/article/resume?ids=" + id)
+        .then(res => {
+          if (res.code == "SUCC") {
+            this.getOrderData();
+            this.$Message.success(res.message);
+          } else {
+            this.$Message.warning(res.message);
+          }
+        })
+        .catch(req => {});
+    }
+  }
+};
 </script>
 
 <style scoped>
-.query-c{
-    margin-bottom: 15px
+.query-c {
+  margin-bottom: 15px;
 }
-.az-p span{
- font-size: 14px;
- margin-right: 10px
+.az-p span {
+  font-size: 14px;
+  margin-right: 10px;
 }
-.ivu-page{
-    text-align: right;
-    margin-right: 30px
+.ivu-page {
+  text-align: right;
+  margin-right: 30px;
 }
 </style>

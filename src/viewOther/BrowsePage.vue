@@ -70,11 +70,33 @@
              isShowC: false
          }
      },
+     created() {
+         sessionStorage.setItem('id',this.$route.query.id)
+         this.getArticledetail()
+     },
      methods: {
          handleC () {
              console.log(45)
              this.isShowC = !this.isShowC
-         }
+         },
+         // 获取文章详情
+        getArticledetail () {
+            var id = sessionStorage.getItem('id')
+            console.log(id)
+            if (id == undefined) {
+                return false
+            }
+            this.$post("/admin/article/getDetail?id="+id).then(res => {
+                console.log(res)
+               if (res.code == "SUCC") {
+                   this.detailData = res.result
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
      },
  }
  </script>

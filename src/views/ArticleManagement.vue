@@ -35,7 +35,7 @@
     </div>
     <div class="az-p">
       <span>全选/不全选</span>
-      <i-button type="error" @click="handleSearch()">删除所选</i-button>
+      <i-button type="error" @click="handleDel(ids)">删除所选</i-button>
     </div>
     <br />
     <el-table
@@ -90,13 +90,23 @@ export default {
       currentPage: 1,
       keywords: "",
       endTime: "",
-      startTime: ""
+      startTime: "",
+      selectArr: [],
+      ids: ''
     };
   },
   created() {
     this.getOrderData();
   },
   methods: {
+    open (id) {
+      this.$router.push({
+        path: '/AddArticle',
+        query: {
+          id: id
+        }
+      })
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -107,7 +117,12 @@ export default {
       }
     },
     handleSelectionChange(val) {
-      this.multipleSelection = val;
+      this.selectArr = []
+      for (let index = 0; index < val.length; index++) {
+        const ele = val[index].id
+        this.selectArr[index] = ele
+      }
+      this.ids = this.selectArr.join(",")
     },
     // 切换页面触发
     handleCurrentPage(val) {
@@ -126,7 +141,8 @@ export default {
         pageNum: this.currentPage,
         keywords: this.keywords,
         startTime: this.startTime,
-        endTime: this.endTime
+        endTime: this.endTime,
+        isDelete: false
       };
       this.$get("/admin/article/getList", data).then(res => {
         if (res.code == "SUCC") {

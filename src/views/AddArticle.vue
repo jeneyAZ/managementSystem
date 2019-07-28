@@ -3,28 +3,27 @@
         <i-form :model="formItem" :label-width="80">
             <Form-item label="所属分类：">
                 <i-select :model.sync="model" style="width:100px" @on-change='handleSelectKind($event)' placeholder="请选择分类">
-                    <i-option v-for="item in kindList" :value="item.value">{{item.label}}</i-option>
+                    <i-option v-for="item in kindList" :value="item.id">{{item.name}}</i-option>
                 </i-select>
             </Form-item>
             <Form-item label="信息标题：">
-                <i-input :value.sync="formItem.title" placeholder="请输入信息标题"></i-input>
+                <i-input :value.sync="formItem.title" v-model="formItem.title" placeholder="请输入信息标题"></i-input>
             </Form-item>
             <Form-item label="图片：">
                 <i-input :value.sync="formItem.imgurl" readonly style="width:60%"></i-input>
                 <template>
                     <div class="file">点击选择上传文件
                         <input type="file" id="fileId" placeholder="点击上传文件" @change="uploadFile($event)">
-                        <!-- <div class="clickBtn"></div> -->
                     </div>
                 </template>
             </Form-item>
-            <Form-item label="添加时间：">
+            <!-- <Form-item label="添加时间：">
                 <row>
                      <i-col span="12">
                          <Date-picker type="date" :value.sync='formItem.time' placeholder="选择日期" style="width: 200px" @on-change="getDate($event)"></Date-picker>
                      </i-col>
                 </row>
-            </Form-item>
+            </Form-item> -->
             <div class="edit_container">
                <quill-editor
                     v-model="content"
@@ -36,18 +35,18 @@
                 <div v-html="str" class="ql-editor">{{str}}</div>
             </div>
             <Form-item label="浏览量：">
-                <i-input :value.sync="Browsing" readonly></i-input>
+                <i-input :value.sync="Browsing" v-model="Browsing"></i-input>
             </Form-item>
             <Form-item label="点赞量：">
-                <i-input :value.sync="Browsing" readonly></i-input>
+                <i-input :value.sync="zan" v-model="zan"></i-input>
             </Form-item>
             <Form-item label="属性标记：">
-                <Radio-group :model.sync="value" @on-change="xxx($event)">
-                    <Radio v-for="(item, index) in radioList" :label="item.value" :key="index">{{item.label}}</Radio>
+                <Radio-group :model.sync="value" @on-change="tagChange($event)">
+                    <Radio v-for="(item, index) in tagList" :label="item.id" :key="index">{{item.name}}</Radio>
                 </Radio-group>
             </Form-item>
             <Form-item>
-                <i-button type="primary" size="large" @click="submit()">提交</i-button>
+                <i-button type="primary" size="large" @click="addArticle()">提交</i-button>
             </Form-item>
         </i-form>
     </div>
@@ -66,16 +65,6 @@ export default {
     data() {
         return {
             model: '',
-            kindList: [
-                {
-                    value: 1,
-                    label: '科幻'
-                },
-                {
-                    value: 2,
-                    label: '恐怖'
-                }
-            ], // 类型选择
             formItem: {
                 title: '',
                 time: '',
@@ -88,98 +77,77 @@ export default {
             // 浏览量
             Browsing: '',
             zan: '',
-            radioList: [
-                {
-                  label: '推荐',
-                  value: '0'
-                }, {
-                  label: '原创',
-                  value: '1'
-                }, {
-                  label: '回收站',
-                  value: '2'
-                }
-            ],
-            value: 0
+            tagList: [],
+            kindID: '',
+            value: 0,
+            kindList: []
         }
     },
     created() {
-        this.addArticle()
-        switch (this.value) {
-            case 0:
-
-                break;
-
-            default:
-                break;
-        }
+        this.kindList = JSON.parse(localStorage.getItem('kindTxt'))
+        this.getArticledetail()
+        this.getTag()
     },
     methods: {
-        xxx (val) {
-            console.log(val, 'az')
+        // 获取标签
+        getTag () { 
+            var data = {
+                pageNum: 1,
+                pageSize: 10
+            }
+            this.$get("/admin/article_tag/getList", data).then(res => {
+                if (res.code == "SUCC") {
+                var res = res.result;
+                this.tagList = res.data;
+                } else {
+                this.$Message.warning(res.message);
+                }
+            });
+         },
+        //  标签触发
+        tagChange (val) {
             this.value = val
         },
         // 类型选择触发
         handleSelectKind (val) {
-            console.log(val)
+            this.kindID = val
         },
         // 日期选择
-        getDate (val) {
-            this.formItem.time = val
-            console.log(this.formItem.time)
-        },
+        // getDate (val) {
+        //     this.formItem.time = val
+        //     console.log(this.formItem.time)
+        // },
         // 文件上传
         uploadFile (event, i) {
+            var that = this
           let file = event.target.files[0]
-          console.log(file)
-          return false
           let param = new FormData()
-          param.append('file', file, file.name)
-          param.append('type', '1')
-          let url = this.$api.order + '/api/Upload/uploadComplainFile'
-          postImg(url, param)
-            .then(res => {
-              console.log(res)
-            })
-            .catch(e => {
-              // alert(e)
-              console.log(e)
-              this.$toast(e.msg)
-            })
+        //   param.append('file', file, file.name)
+        //   param.append('type', '1')
+        var reader = new FileReader();
+         reader.readAsDataURL(file);
+         reader.onload = function (e) {
+             // 读取到的图片base64 数据编码 将此编码字符串传给后台即可
+             that.formItem.imgurl = e.target.result
+         }
         },
         // 富文本
-        onEditorReady(editor) { // 准备编辑器
-
-        },
-        onEditorBlur(val){
-            console.log(val, '失去焦点事件')
-        }, // 失去焦点事件
-        onEditorFocus(val){
-            console.log(val, '获得焦点事件')
-        }, // 获得焦点事件
-        onEditorChange(val){
-            console.log(val.html, '内容改变事件')
-        }, // 内容改变事件
+        onEditorReady(editor) {}, // 准备编辑器 
+        onEditorBlur(val){}, // 失去焦点事件
+        onEditorFocus(val){}, // 获得焦点事件
+        onEditorChange(val){}, // 内容改变事件
         escapeStringHTML(str) {
             str = str.replace(/&lt;/g,'<');
             str = str.replace(/&gt;/g,'>');
             return str;
         },
-        // 添加文章
-        addArticle () {
-            var data = {
-                "articleCategoryId": 0,
-                "browseTimes": 0,
-                "content": "string",
-                "id": 0,
-                "praiseTimes": 0,
-                "sortNumber": 0,
-                "status": 0,
-                "tagIds": "string",
-                "thumbnailUrl": "string",
-                "title": "string"
+        // 获取文章详情
+        getArticledetail () {
+            var id = this.$route.query.id
+            if (id == undefined) {
+                return false
             }
-            this.$post("/admin/article/add").then(res => {
+            this.$post("/admin/article/getDetail?id="+id).then(res => {
                 console.log(res)
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)
@@ -193,19 +161,42 @@ export default {
         // 修改文章
         resetArticle () {
             var data = {
-                "articleCategoryId": 0,
-                "browseTimes": 0,
-                "content": "string",
-                "id": 0,
-                "praiseTimes": 0,
-                "sortNumber": 0,
-                "status": 0,
-                "tagIds": "string",
-                "thumbnailUrl": "string",
-                "title": "string"
+                articleCategoryId: this.kindID,
+                browseTimes: this.Browsing,
+                content: this.content,
+                id: this.$route.query.id,
+                praiseTimes: this.zan,
+                sortNumber: 0,
+                status: 1,
+                tagIds: this.value,
+                thumbnailUrl: this.formItem.imgurl,
+                title: this.formItem.title
             }
-            this.$post("/admin/article/update").then(res => {
+            this.$post("/admin/article/update", data).then(res => {
                 console.log(res)
+               if (res.code == "SUCC") {
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+        // 添加文章
+        addArticle () {
+            var data = {
+                articleCategoryId: this.kindID,
+                browseTimes: this.Browsing,
+                content: this.content,
+                praiseTimes: this.zan,
+                sortNumber: 0,
+                status: 1,
+                tagIds: this.value,
+                thumbnailUrl: this.formItem.imgurl,
+                title: this.formItem.title
+            }
+            this.$post("/admin/article/add", data).then(res => {
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)
                } else {

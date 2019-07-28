@@ -11,17 +11,17 @@
         </div>
         <div class="contant">
             <div class="comment">
-                <h3 class="list_title">精彩评论<Icon type=" checkmark"></Icon></h3>
+                <h3 class="list_title">精彩文章<Icon type=" checkmark"></Icon></h3>
                 <ul>
-                    <li>
+                    <li v-for="(item, index) in dataList" :key="index" @click="toDetail(item.id)">
 						<div class="list_block_l"><img src="../assets/imgs/logo.png" alt=""></div>
 						<div class="list_block_r">
 							<div class="list_block_r_info">Amaze</div>
 							<div class="list_block_r_text">那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。</div>
 							<div class="list_block_r_bottom">
-								<div class="list_bottom_info_l">10分钟前</div>
+								<div class="list_bottom_info_l">{{item.createTime}}</div>
 								<div class="list_bottom_info_r">
-									<span><Icon type="ios-thumbs-up-outline"/>5</span>
+									<span><Icon type="ios-thumbs-up-outline"/>{{item.praiseTimes}}</span>
 									<span>点赞</span>
                                 </div>
 							</div>
@@ -50,14 +50,51 @@
                  require('../assets/imgs/bg04.jpg'),
                  require('../assets/imgs/bg05.jpg'),
                  require('../assets/imgs/bg06.jpg'),
-             ]
+             ],
+             pageSize: 10,
+             currentPage: 1,
+             dataList: []
+
          }
      },
+     created() {
+         this.getOrderData()
+     },
      methods: {
+         toDetail(id) {
+             this.$router.push({
+                 path: '/BrowsePage',
+                 query: {
+                     id : id
+                 }
+             })
+         },
          handleC () {
              console.log(45)
              this.isShowC = !this.isShowC
-         }
+         },
+         // 获取列表数据
+    getOrderData() {
+      var data = {
+        pageSize: this.pageSize,
+        pageNum: this.currentPage,
+        keywords: '',
+        startTime: '',
+        endTime: '',
+        isDelete: false
+      };
+      this.$get("/admin/article/getList", data).then(res => {
+        if (res.code == "SUCC") {
+          var res = res.result;
+        //   this.total = res.total;
+          this.dataList = res.data;
+          console.log(this.dataList);
+          
+        } else {
+          this.$Message.warning(res.message);
+        }
+      });
+    },
      },
  }
  </script>
@@ -68,6 +105,7 @@
     height: 100%;
     margin: 0 auto;
     position: relative;
+    overflow: scroll
 }
 .carousel .demo-carousel img{
     width: 100%;
