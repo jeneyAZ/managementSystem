@@ -143,7 +143,7 @@ export default {
         startTime: this.startTime,
         endTime: this.endTime,
         isDelete: false
-      };
+      }
       this.$get("/admin/article/getList", data).then(res => {
         if (res.code == "SUCC") {
           var res = res.result;
