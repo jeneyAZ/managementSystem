@@ -37,22 +37,22 @@ axios.interceptors.request.use(config => {
 // 响应拦截器
 axios.interceptors.response.use(response => {
   var code = parseInt(response.data.code)
-  if (code === 603) {
+  // if (code === 603) {
     // Message({
     //   type:'error',
     //   message:'token失效，请重新登录',
     //   duration:1000
     // })
-    this.$Message.warning('这是一条警告的提示');
-    router.push('/login')
-    localStorage.removeItem('token')
-    localStorage.removeItem('username')
-  }
-  if (!localStorage.getItem('token')) {
+  //   this.$Message.warning('这是一条警告的提示');
+  //   router.push('/login')
+  //   localStorage.removeItem('token')
+  //   localStorage.removeItem('username')
+  // }
+  // if (!localStorage.getItem('token')) {
     // 页面跳转
-    router.push('/login')
+    // router.push('/login')
     // Message.error('请登录')
-  }
+  // }
   return response;
 }, error => {
   return Promise.reject(error);

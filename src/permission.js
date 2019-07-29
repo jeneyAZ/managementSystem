@@ -32,10 +32,11 @@ router.beforeEach(async (to, from, next) => {
         }
     } else {
         hasMenus = false
-        if (to.path === '/login') {
-            next()
-        } else {
-            next(`/login`)
-        }
+        next()
+        // if (to.path === '/login') {
+        //     next()
+        // } else {
+        //     next(`/login`)
+        // }
     }
 })

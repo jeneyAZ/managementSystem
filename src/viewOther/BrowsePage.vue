@@ -10,14 +10,14 @@
             <div class="opration">
                 <div class="comm">
                     <Icon type="ios-chatbubble"></Icon>
-                    <span @click="handleC()">评论</span>
+                    <span @click="handleC(0)">评论</span>
                     <div v-if="isShowC" class="commBox">
                          <i-input type="textarea" v-model="commentText" :rows="4" placeholder="请输入..."></i-input>
-                         <span @click="handleC()">提交</span>
+                         <span @click="handleC(0)">提交</span>
                     </div>
                 </div>
                 <div class="zan">
-                    <Icon type="thumbsup">点赞</Icon>
+                    <Icon type="ios-thumbs-up-outline"/>赞
                 </div>
             </div>
             <div class="comment">
@@ -31,8 +31,8 @@
 							<div class="list_block_r_bottom">
 								<div class="list_bottom_info_l">10分钟前</div>
 								<div class="list_bottom_info_r">
-									<span><i class="iconfont"></i>5 </span>
-									<span> 回复</span></div>
+									<span><Icon type="ios-thumbs-up-outline"/>5 </span>
+									<span>赞</span></div>
 							</div>
 						</div>
                     </li>
@@ -44,8 +44,8 @@
 							<div class="list_block_r_bottom">
 								<div class="list_bottom_info_l">10分钟前</div>
 								<div class="list_bottom_info_r">
-									<span><i class="iconfont"></i>5 </span>
-									<span> 回复</span>
+									<span><Icon type="ios-thumbs-up-outline"/>5 </span>
+									<span>赞</span>
                                 </div>
 							</div>
 						</div>
@@ -53,7 +53,11 @@
                 </ul>
             </div>
             <div class="appeal">
-                <span>—— 投诉 ——</span>
+                <div v-if="isShowC2" class="commBox">
+                     <i-input type="textarea" v-model="commentText" :rows="4" placeholder="请输入..."></i-input>
+                     <span @click="handleC(1)" class="submit">提交</span>
+                </div>
+                <i-button type="success" @click="handleC(1)" long>投诉</i-button>
             </div>
         </div>
     </div>
@@ -67,7 +71,8 @@
              title: '你认识萌萌的小熊猫吗',
              time: '2019-7-18',
              commentText: '',
-             isShowC: false
+             isShowC: false,
+             isShowC2: false
          }
      },
      created() {
@@ -75,9 +80,12 @@
          this.getArticledetail()
      },
      methods: {
-         handleC () {
-             console.log(45)
-             this.isShowC = !this.isShowC
+         handleC (idx) {
+             if (idx == 0) {
+                 this.isShowC = !this.isShowC
+             } else {
+                 this.isShowC2 = !this.isShowC2
+             }
          },
          // 获取文章详情
         getArticledetail () {
@@ -224,5 +232,6 @@
     color: #757575;
     box-sizing: border-box;
     border-bottom: 1px solid #f1f1f1;
+    padding-top: 20px
 }
  </style>

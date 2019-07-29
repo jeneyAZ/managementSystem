@@ -1,5 +1,6 @@
 <template>
-    <div class="login-vue" :style="bg">
+    <!-- <div class="login-vue" :style="bg"> -->
+    <div class="login-vue">
         <div class="container">
             <p class="title">登录</p>
             <div class="input-c">
@@ -26,16 +27,16 @@ export default {
         }
     },
     created() {
-        this.bg.backgroundImage = 'url(' + require('../assets/imgs/bg0' + new Date().getDay() + '.jpg') + ')'
+        // this.bg.backgroundImage = 'url(' + require('../assets/imgs/bg0' + new Date().getDay() + '.jpg') + ')'
     },
-    watch: {
-        $route: {
-            handler: function(route) {
-                this.redirect = route.query && route.query.redirect
-            },
-            immediate: true
-        }
-    },
+    // watch: {
+    //     $route: {
+    //         handler: function(route) {
+    //             this.redirect = route.query && route.query.redirect
+    //         },
+    //         immediate: true
+    //     }
+    // },
     methods: {
         register() {
             console.log('注册账号')
@@ -82,13 +83,14 @@ export default {
     justify-content: center;
     align-items: center;
     color: #fff;
+    background-image: url('../assets/imgs/bg05.jpg');
 }
 .login-vue .container {
     background: rgba(255, 255, 255, .5);
-    width: 300px;
+    width: 400px;
     text-align: center;
     border-radius: 10px;
-    padding: 30px;
+    padding: 40px;
 }
 .login-vue .ivu-input {
     background-color: transparent;
@@ -109,12 +111,12 @@ export default {
     color: rgba(255, 255, 255, .8);
 }
 .login-vue .title {
-    font-size: 16px;
-    margin-bottom: 20px;
+    font-size: 20px;
+    margin-bottom: 30px;
 }
 .login-vue .input-c {
     margin: auto;
-    width: 200px;
+    width: 300px;
 }
 .login-vue .error {
     color: red;
@@ -125,7 +127,7 @@ export default {
     height: 20px;
 }
 .login-vue .submit {
-    width: 200px;
+    width: 300px;
 }
 .login-vue .account {
     margin-top: 30px;
