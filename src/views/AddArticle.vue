@@ -9,6 +9,9 @@
             <Form-item label="信息标题：">
                 <i-input :value.sync="formItem.title" v-model="formItem.title" placeholder="请输入信息标题"></i-input>
             </Form-item>
+            <Form-item label="文章简介：">
+                <i-input :value.sync="formItem.intro" v-model="formItem.title" placeholder="请输入文章简介"></i-input>
+            </Form-item>
             <Form-item label="图片：">
                 <i-input :value.sync="formItem.imgurl" readonly style="width:60%"></i-input>
                 <template>
@@ -17,13 +20,6 @@
                     </div>
                 </template>
             </Form-item>
-            <!-- <Form-item label="添加时间：">
-                <row>
-                     <i-col span="12">
-                         <Date-picker type="date" :value.sync='formItem.time' placeholder="选择日期" style="width: 200px" @on-change="getDate($event)"></Date-picker>
-                     </i-col>
-                </row>
-            </Form-item> -->
             <div class="edit_container">
                <quill-editor
                     v-model="content"
@@ -46,7 +42,8 @@
                 </Radio-group>
             </Form-item>
             <Form-item>
-                <i-button type="primary" size="large" @click="addArticle()">提交</i-button>
+                <i-button type="warning" size="large" @click="resetArticle()">修改</i-button>
+                <i-button type="primary" size="large" @click="addArticle()">添加</i-button>
             </Form-item>
         </i-form>
     </div>
@@ -68,7 +65,8 @@ export default {
             formItem: {
                 title: '',
                 time: '',
-                imgurl: ''
+                imgurl: '',
+                intro: ''
             },
             // 文本编辑
             content: '',
@@ -79,6 +77,8 @@ export default {
             zan: '',
             tagList: [],
             kindID: '',
+            status: 1,
+            sortNumber: 1,
             value: 0,
             kindList: []
         }
@@ -112,11 +112,6 @@ export default {
         handleSelectKind (val) {
             this.kindID = val
         },
-        // 日期选择
-        // getDate (val) {
-        //     this.formItem.time = val
-        //     console.log(this.formItem.time)
-        // },
         // 文件上传
         uploadFile (event, i) {
             var that = this
@@ -150,6 +145,17 @@ export default {
             this.$post("/admin/article/getDetail?id="+id).then(res => {
                 console.log(res)
                if (res.code == "SUCC") {
+                   var res = res.result
+                   this.kindID = res.articleCategoryId
+                   this.Browsing = res.browseTimes
+                   this.content = res.content
+                   this.zan = res.praiseTimes
+                   this.sortNumber = res.sortNumber
+                   this.status = res.status
+                   this.value = res.tagIdList[0]
+                   this.formItem.imgurl = res.thumbnailUrl
+                   this.formItem.title = res.title
+                   this.formItem.intro = res.intro
                    this.$Message.success(res.message)
                } else {
                    this.$Message.warning(res.message)
@@ -166,11 +172,12 @@ export default {
                 content: this.content,
                 id: this.$route.query.id,
                 praiseTimes: this.zan,
-                sortNumber: 0,
-                status: 1,
+                sortNumber: this.sortNumber,
+                status: this.status,
                 tagIds: this.value,
                 thumbnailUrl: this.formItem.imgurl,
-                title: this.formItem.title
+                title: this.formItem.title,
+                intro: this.formItem.intro
             }
             this.$post("/admin/article/update", data).then(res => {
                 console.log(res)
@@ -190,11 +197,12 @@ export default {
                 browseTimes: this.Browsing,
                 content: this.content,
                 praiseTimes: this.zan,
-                sortNumber: 0,
-                status: 1,
+                sortNumber: this.sortNumber,
+                status: this.status,
                 tagIds: this.value,
                 thumbnailUrl: this.formItem.imgurl,
-                title: this.formItem.title
+                title: this.formItem.title,
+                intro: this.formItem.intro
             }
             this.$post("/admin/article/add", data).then(res => {
                if (res.code == "SUCC") {

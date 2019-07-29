@@ -1,31 +1,28 @@
 <template>
     <div>
         <i-form :model="formItem" :label-width="80">
-            <Form-item label="标题：">
-                <i-input :value.sync="formItem.title" placeholder="请输入广告标题"></i-input>
+            <Form-item label="所属分类：">
+                <i-select :model.sync="model" style="width:100px" @on-change='handleSelectKind($event)' placeholder="请选择分类">
+                    <i-option v-for="item in kindList" :value="item.id">{{item.name}}</i-option>
+                </i-select>
             </Form-item>
-            <Form-item label="图片">
-                <i-input :value.sync="formItem.imgurl" readonly style="width:60%" placeholder="点击上传文件"></i-input>
+            <Form-item label="广告标题：">
+                <i-input :value.sync="formItem.title" v-model="formItem.title" placeholder="请输入信息标题"></i-input>
+            </Form-item>
+            <Form-item label="图片：">
+                <i-input :value.sync="formItem.imgurl" readonly style="width:60%"></i-input>
                 <template>
                     <div class="file">点击选择上传文件
                         <input type="file" id="fileId" placeholder="点击上传文件" @change="uploadFile($event)">
-                        <!-- <div class="clickBtn"></div> -->
                     </div>
                 </template>
             </Form-item>
-             <Form-item label="网址：">
-                <i-input :value.sync="formItem.address" placeholder="请输入网址"></i-input>
-            </Form-item>
-             <Form-item label="备注：">
-                <i-input :value.sync="formItem.remark" placeholder="请输入备注信息"></i-input>
-            </Form-item>
-            <Form-item label="类型：">
-                <i-select :model.sync="model" style="width:150px" @on-change='handleSelectKind($event)' placeholder="请选择广告类型">
-                    <i-option v-for="item in kindList" :value="item.value">{{item.label}}</i-option>
-                </i-select>
+            <Form-item label="备注：">
+                <i-input :value.sync="formItem.remark" v-model="formItem.remark" placeholder="请输入备注"></i-input>
             </Form-item>
             <Form-item>
-                <i-button type="primary" size="large" @click="submit()">确定</i-button>
+                <i-button type="warning" size="large" @click="resetArticle()">修改</i-button>
+                <i-button type="primary" size="large" @click="addArticle()">添加</i-button>
             </Form-item>
         </i-form>
     </div>
@@ -44,62 +41,111 @@ export default {
     data() {
         return {
             model: '',
-            // 类型选择
-            kindList: [
-                {
-                    value: 1,
-                    label: '首页广告'
-                },
-                {
-                    value: 2,
-                    label: '内页广告'
-                }
-            ],
             formItem: {
                 title: '',
-                address: '',
-                remark: '',
-                imgurl: ''
-            }
+                imgurl: '',
+                remark: ''
+            },
+            kindID: '',
+            kindList: [
+                {
+                    id: 1,
+                    name: '首页广告'
+                },
+                {
+                    id: 2,
+                    name: '内页广告'
+                }
+            ]
         }
     },
     created() {
-        this.getOrderData()
-        switch (this.value) {
-            case 0:
-
-                break;
-
-            default:
-                break;
-        }
+        this.getArticledetail()
     },
     methods: {
         // 类型选择触发
         handleSelectKind (val) {
-            console.log(val)
+            this.kindID = val
         },
         // 文件上传
         uploadFile (event, i) {
+            var that = this
           let file = event.target.files[0]
-          console.log(file)
-          return false
           let param = new FormData()
-          param.append('file', file, file.name)
-          param.append('type', '1')
-          let url = this.$api.order + '/api/Upload/uploadComplainFile'
-          postImg(url, param)
-            .then(res => {
-              console.log(res)
-            })
-            .catch(e => {
-              // alert(e)
-              console.log(e)
-              this.$toast(e.msg)
-            })
+        //   param.append('file', file, file.name)
+        //   param.append('type', '1')
+        var reader = new FileReader();
+         reader.readAsDataURL(file);
+         reader.onload = function (e) {
+             // 读取到的图片base64 数据编码 将此编码字符串传给后台即可
+             that.formItem.imgurl = e.target.result
+         }
         },
-        // 获取列表数据
-        getOrderData () {}
+        // 获取广告详情
+        getArticledetail () {
+            var id = this.$route.query.id
+            if (id == undefined) {
+                return false
+            }
+            this.$post("/admin/advertisement/getDetail?id="+id).then(res => {
+                console.log(res)
+               if (res.code == "SUCC") {
+                   var res = res.result
+                   this.formItem.title = res.title
+                   this.formItem.imgurl = res.imageUrl
+                   this.formItem.remark = res.remark
+                   this.kindID = res.adType
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+        // 修改广告
+        resetArticle () {
+            var data = {
+                adType: this.kindID,
+                forwareUrl: 'aa',
+                remark: this.formItem.remark,
+                id: this.$route.query.id,
+                sortNumber: 0,
+                status: 1,
+                imageUrl: this.formItem.imgurl,
+                title: this.formItem.title
+            }
+            this.$post("/admin/advertisement/update", data).then(res => {
+                console.log(res)
+               if (res.code == "SUCC") {
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+        // 添加广告
+        addArticle () {
+            var data = {
+                adType: this.kindID,
+                remark: this.formItem.remark,
+                sortNumber: 0,
+                status: 1,
+                imageUrl: this.formItem.imgurl,
+                title: this.formItem.title
+            }
+            this.$post("/admin/advertisement/add", data).then(res => {
+               if (res.code == "SUCC") {
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        }
     }
 }
 </script>
@@ -142,4 +188,8 @@ export default {
 .quill-editor{
     height: 400px;
 }
+.ivu-btn-warning{
+    margin-right: 20px
+}
+</style>
 </style>

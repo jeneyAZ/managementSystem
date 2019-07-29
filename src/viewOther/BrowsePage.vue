@@ -2,49 +2,34 @@
     <div class="Browse">
         <div class="head"><Icon type="social-reddit-outline"></Icon></div>
         <div class="contant">
-            <h3 class="title">{{title}}</h3>
-            <span class="time">发表于：{{time}}</span>
-            <div class="articleBox">
-                sascdcfdvcfgfv fvdefvgfvrbvrwbfvdvdvscadwwdwcddv
-            </div>
+            <h3 class="title">{{detailData.title}}</h3>
+            <span class="time">发表于：{{detailData.updateTime}}</span><i class="kind">{{detailData.categoryName}}</i>
+            <div class="articleBox">{{detailData.content}}</div>
             <div class="opration">
                 <div class="comm">
                     <Icon type="ios-chatbubble"></Icon>
                     <span @click="handleC(0)">评论</span>
                     <div v-if="isShowC" class="commBox">
                          <i-input type="textarea" v-model="commentText" :rows="4" placeholder="请输入..."></i-input>
-                         <span @click="handleC(0)">提交</span>
+                         <Button type="primary" long @click="submitComm()">提交</Button>
                     </div>
                 </div>
-                <div class="zan">
-                    <Icon type="ios-thumbs-up-outline"/>赞
+                <div class="zan" @click="clickZan(0, '')">
+                    <Icon type="ios-thumbs-up-outline"/>{{detailData.praiseTimes}}赞
                 </div>
             </div>
             <div class="comment">
                 <h3 class="list_title">精彩评论<Icon type=" checkmark"></Icon></h3>
                 <ul>
-                    <li>
-						<div class="list_block_l"><img src="../assets/imgs/logo.png" alt=""></div>
+                    <li v-for="(item, index) in appealData" :key="index">
+						<div class="list_block_l"><img :src="item.portraitUrl" alt=""></div>
 						<div class="list_block_r">
-							<div class="list_block_r_info">Amaze</div>
-							<div class="list_block_r_text">那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。</div>
+							<div class="list_block_r_info">{{item.nickname}}</div>
+							<div class="list_block_r_text">{{item.content}}</div>
 							<div class="list_block_r_bottom">
-								<div class="list_bottom_info_l">10分钟前</div>
-								<div class="list_bottom_info_r">
-									<span><Icon type="ios-thumbs-up-outline"/>5 </span>
-									<span>赞</span></div>
-							</div>
-						</div>
-                    </li>
-                     <li>
-						<div class="list_block_l"><img src="../assets/imgs/logo.png" alt=""></div>
-						<div class="list_block_r">
-							<div class="list_block_r_info">Amaze</div>
-							<div class="list_block_r_text">那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。</div>
-							<div class="list_block_r_bottom">
-								<div class="list_bottom_info_l">10分钟前</div>
-								<div class="list_bottom_info_r">
-									<span><Icon type="ios-thumbs-up-outline"/>5 </span>
+								<div class="list_bottom_info_l">{{item.createTime}}</div>
+								<div class="list_bottom_info_r" @click="clickZan(1, item.id)">
+									<span><Icon type="ios-thumbs-up-outline"/>{{item.praiseTimes}}</span>
 									<span>赞</span>
                                 </div>
 							</div>
@@ -54,10 +39,10 @@
             </div>
             <div class="appeal">
                 <div v-if="isShowC2" class="commBox">
-                     <i-input type="textarea" v-model="commentText" :rows="4" placeholder="请输入..."></i-input>
-                     <span @click="handleC(1)" class="submit">提交</span>
+                     <i-input type="textarea" v-model="appealText" :rows="4" placeholder="请输入..."></i-input>
+                     <i-button type="success" @click="submitAppeal()" long>提交</i-button>
                 </div>
-                <i-button type="success" @click="handleC(1)" long>投诉</i-button>
+                <p class="appealsss" @click="handleC(1)">—— 投诉 ——</p>
             </div>
         </div>
     </div>
@@ -68,36 +53,92 @@
      name: 'BrowsePage',
      data() {
          return {
-             title: '你认识萌萌的小熊猫吗',
-             time: '2019-7-18',
+             userName: '你认识',
+             userUrl: 'uijuhhi',
+             phone: '15514538697',
              commentText: '',
+             appealText: '',
              isShowC: false,
-             isShowC2: false
+             isShowC2: false,
+             detailData: {},
+             appealData: []
          }
      },
      created() {
-         sessionStorage.setItem('id',this.$route.query.id)
          this.getArticledetail()
+         this.getAppeal()
      },
      methods: {
          handleC (idx) {
              if (idx == 0) {
                  this.isShowC = !this.isShowC
+
              } else {
                  this.isShowC2 = !this.isShowC2
              }
          },
-         // 获取文章详情
+        // 获取文章详情
         getArticledetail () {
-            var id = sessionStorage.getItem('id')
-            console.log(id)
-            if (id == undefined) {
-                return false
-            }
-            this.$post("/admin/article/getDetail?id="+id).then(res => {
+            var id = this.$route.query.id
+            // if (id == undefined) {
+            //     return false
+            // }
+            this.$post("/front/article/getDetail?id=1").then(res => {
                 console.log(res)
                if (res.code == "SUCC") {
                    this.detailData = res.result
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+        // 获取文章评论
+        getAppeal () {
+            this.$post("/front/article_comment/getList?pageNum=1&pageSize=100&articleId=1").then(res => {
+                console.log(res)
+               if (res.code == "SUCC") {
+                   this.appealData = res.result.data
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+         // 点赞
+        clickZan (id, id2) {
+            this.$post("/front/article_praise/praise?articleId="+this.detailData.id+"&commentId="+id2+"&commentType="+id).then(res => {
+               if (res.code == "SUCC") {
+                   this.getAppeal()
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+         // 发布评论
+        submitComm () {
+            this.$post("/front/article_comment/submitComment?articleId="+this.detailData.id+"&nickname="+this.userName+"&portraitUrl="+this.userUrl+"&content="+this.commentText).then(res => {
+               if (res.code == "SUCC") {
+                   this.getAppeal()
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+         // 投诉
+        submitAppeal () {
+            this.$post("/front/article_complaint/submitComplaint?articleId="+this.detailData.id+"&userName="+this.userName+"&tel="+this.phone+"&content="+this.appealText).then(res => {
+               if (res.code == "SUCC") {
+                   this.getAppeal()
+                   this.$Message.success(res.message)
                } else {
                    this.$Message.warning(res.message)
                }
@@ -115,6 +156,7 @@
     height: 100%;
     margin: 0 auto;
     position: relative;
+    overflow: scroll
 }
 .head{
     position: fixed;
@@ -142,6 +184,10 @@
     margin-bottom: 10px;
     padding: 0 7px
 }
+.kind{
+    color:deeppink;
+    font-style: normal
+}
 .contant .articleBox{
     border-bottom: 1px solid #ececec;
     padding: 10px 7px
@@ -158,10 +204,13 @@
 }
 .opration .commBox span{
     display: inline-block;
-    margin-top: 10px;
+    margin-top: 20px;
     border: 1px solid #ececec;
     border-radius: 2px;
-    width: 30px
+    padding: 10px 20px
+}
+.commBox .ivu-btn-primary{
+    margin-top: 20px
 }
 .comment{
     border-bottom: 20px solid #ececec;
@@ -201,6 +250,9 @@
     color: #757575;
     padding-top: 5px;
 }
+.comment .list_bottom_info_r{
+    cursor: pointer
+}
 .comment .list_bottom_info_l {
     position: relative;
     float: left;
@@ -233,5 +285,14 @@
     box-sizing: border-box;
     border-bottom: 1px solid #f1f1f1;
     padding-top: 20px
+}
+.appealsss{
+    cursor: pointer   
+}
+.comm span{
+    cursor: pointer
+}
+.zan{
+    cursor: pointer
 }
  </style>

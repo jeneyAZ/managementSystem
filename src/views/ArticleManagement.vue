@@ -17,12 +17,12 @@
         v-model="endTime"
         style="width: 200px;margin:0 10px"
       ></el-date-picker>
-      <el-select size="small" v-model="value" placeholder="请选择文章类型">
+      <el-select size="small" v-model="value" @on-change='handleSelectKind($event)' placeholder="请选择文章类型">
         <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
+          v-for="item in kindList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
         ></el-option>
       </el-select>
       <el-input
@@ -49,7 +49,7 @@
       <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="title" label="信息名称"></el-table-column>
       <el-table-column prop="categoryName" label="所属分类"></el-table-column>
-      <el-table-column prop="发表时间" label="发表时间"></el-table-column>
+      <el-table-column prop="createTime" label="发表时间"></el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
           <el-button @click="open(scope.row.id)" type="text" size="small">编辑</el-button>
@@ -73,16 +73,7 @@ export default {
   name: "ArticleManagement",
   data() {
     return {
-      options: [
-        {
-          value: 1,
-          label: "科幻"
-        },
-        {
-          value: 2,
-          label: "恐怖"
-        }
-      ],
+      kindList: [],
       value: "",
       dataList: [],
       total: null,
@@ -97,6 +88,7 @@ export default {
   },
   created() {
     this.getOrderData();
+    this.kindList = JSON.parse(localStorage.getItem('kindTxt'))
   },
   methods: {
     open (id) {
@@ -106,15 +98,6 @@ export default {
           id: id
         }
       })
-    },
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
     },
     handleSelectionChange(val) {
       this.selectArr = []
@@ -142,7 +125,8 @@ export default {
         keywords: this.keywords,
         startTime: this.startTime,
         endTime: this.endTime,
-        isDelete: false
+        isDelete: false,
+        articleCategoryId: this.value
       }
       this.$get("/admin/article/getList", data).then(res => {
         if (res.code == "SUCC") {
