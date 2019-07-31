@@ -4,7 +4,7 @@
         <div class="contant">
             <h3 class="title">{{detailData.title}}</h3>
             <span class="time">发表于：{{detailData.updateTime}}</span><i class="kind">{{detailData.categoryName}}</i>
-            <div class="articleBox">{{detailData.content}}</div>
+            <div class="articleBox" v-html="detailData.content"></div>
             <div class="opration">
                 <div class="comm">
                     <Icon type="ios-chatbubble"></Icon>
@@ -80,11 +80,10 @@
         // 获取文章详情
         getArticledetail () {
             var id = this.$route.query.id
-            // if (id == undefined) {
-            //     return false
-            // }
-            this.$post("/front/article/getDetail?id=1").then(res => {
-                console.log(res)
+            if (id == undefined) {
+                return false
+            }
+            this.$post("/front/article/getDetail?id="+id).then(res => {
                if (res.code == "SUCC") {
                    this.detailData = res.result
                } else {

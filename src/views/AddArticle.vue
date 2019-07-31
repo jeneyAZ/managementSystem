@@ -10,7 +10,7 @@
                 <i-input :value.sync="formItem.title" v-model="formItem.title" placeholder="请输入信息标题"></i-input>
             </Form-item>
             <Form-item label="文章简介：">
-                <i-input :value.sync="formItem.intro" v-model="formItem.title" placeholder="请输入文章简介"></i-input>
+                <i-input :value.sync="formItem.intro" v-model="formItem.intro" placeholder="请输入文章简介"></i-input>
             </Form-item>
             <Form-item label="图片：">
                 <i-input :value.sync="formItem.imgurl" readonly style="width:60%"></i-input>
@@ -36,10 +36,19 @@
             <Form-item label="点赞量：">
                 <i-input :value.sync="zan" v-model="zan"></i-input>
             </Form-item>
+             <Form-item label="序号：">
+                <i-input :value.sync="sortNumber" v-model="sortNumber"></i-input>
+            </Form-item>
+            <Form-item label="状态：">
+                <RadioGroup v-model="status">
+                    <Radio label="1">显示</Radio>
+                    <Radio label="0">隐藏</Radio>
+                </RadioGroup>
+            </Form-item>
             <Form-item label="属性标记：">
-                <Radio-group :model.sync="value" @on-change="tagChange($event)">
-                    <Radio v-for="(item, index) in tagList" :label="item.id" :key="index">{{item.name}}</Radio>
-                </Radio-group>
+                <CheckboxGroup v-model="value" @on-change="tagChange($event)">
+                    <Checkbox v-for="(item, index) in tagList" :key="index" :label="item.id">{{item.name}}</Checkbox>
+                </CheckboxGroup>
             </Form-item>
             <Form-item>
                 <i-button type="warning" size="large" @click="resetArticle()">修改</i-button>
@@ -78,8 +87,9 @@ export default {
             tagList: [],
             kindID: '',
             status: 1,
-            sortNumber: 1,
-            value: 0,
+            sortNumber: '',
+            value: [],
+            value1: '',
             kindList: []
         }
     },
@@ -106,7 +116,9 @@ export default {
          },
         //  标签触发
         tagChange (val) {
-            this.value = val
+            this.value1 = val.join(",")
+            console.log(this.value1);
+            
         },
         // 类型选择触发
         handleSelectKind (val) {
@@ -152,7 +164,8 @@ export default {
                    this.zan = res.praiseTimes
                    this.sortNumber = res.sortNumber
                    this.status = res.status
-                   this.value = res.tagIdList[0]
+                   this.value = res.tagIdList
+                   this.value1 = res.tagIdList.join(',')
                    this.formItem.imgurl = res.thumbnailUrl
                    this.formItem.title = res.title
                    this.formItem.intro = res.intro
@@ -174,7 +187,7 @@ export default {
                 praiseTimes: this.zan,
                 sortNumber: this.sortNumber,
                 status: this.status,
-                tagIds: this.value,
+                tagIds: this.value1,
                 thumbnailUrl: this.formItem.imgurl,
                 title: this.formItem.title,
                 intro: this.formItem.intro
@@ -183,6 +196,7 @@ export default {
                 console.log(res)
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)
+                   this.$router.push('/ArticleManagement')
                } else {
                    this.$Message.warning(res.message)
                }
@@ -199,7 +213,7 @@ export default {
                 praiseTimes: this.zan,
                 sortNumber: this.sortNumber,
                 status: this.status,
-                tagIds: this.value,
+                tagIds: this.value1,
                 thumbnailUrl: this.formItem.imgurl,
                 title: this.formItem.title,
                 intro: this.formItem.intro
@@ -207,6 +221,7 @@ export default {
             this.$post("/admin/article/add", data).then(res => {
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)
+                   this.$router.push('/ArticleManagement')
                } else {
                    this.$Message.warning(res.message)
                }
@@ -264,5 +279,8 @@ export default {
 }
 .quill-editor{
     height: 400px;
+}
+.ivu-btn-warning{
+    margin-right: 10px
 }
 </style>

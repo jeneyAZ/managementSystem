@@ -6,8 +6,8 @@ Vue.use(Router)
 const commonRoutes = [
     {
         path: '/',
-        name: 'login',
-        component: () => import('../components/Login.vue')
+        name: 'indexBrowse',
+        component: () => import('../viewOther/IndexBrowse.vue')
     },
     {
         path: '/login',

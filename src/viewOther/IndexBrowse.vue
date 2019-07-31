@@ -2,24 +2,30 @@
     <div class="Browse">
         <div class="carousel">
             <Carousel autoplay>
-                <Carousel-item v-for="(item, index) in imgList" :key="index">
-                    <div class="demo-carousel">
-                        <img :src="item" alt="">
+                <Carousel-item v-for="(item, index) in advList" :key="index">
+                    <div class="demo-carousel" @click="towebsite(item.forwardUrl)">
+                        <img :src="item.imageUrl" alt="">
+                        <span class="imgtxt">{{item.title}}</span>
                     </div>
                 </Carousel-item>
             </Carousel>
+        </div>
+        <div class="tag">
+            
         </div>
         <div class="contant">
             <div class="comment">
                 <h3 class="list_title">精彩文章<Icon type=" checkmark"></Icon></h3>
                 <ul>
                     <li v-for="(item, index) in dataList" :key="index" @click="toDetail(item.id)">
-						<div class="list_block_l"><img src="../assets/imgs/logo.png" alt=""></div>
+						<div class="list_block_l"><img :src="item.thumbnailUrl" alt=""></div>
 						<div class="list_block_r">
-							<div class="list_block_r_info">Amaze</div>
-							<div class="list_block_r_text">那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。</div>
+							<div class="list_block_r_info">{{item.title}}
+                                <!-- <span>{{item.}}</span> -->
+                            </div>
+							<div class="list_block_r_text">{{item.intro}}</div>
 							<div class="list_block_r_bottom">
-								<div class="list_bottom_info_l">{{item.createTime}}</div>
+								<div class="list_bottom_info_l">{{item.updateTime}}</div>
 								<div class="list_bottom_info_r">
 									<span><Icon type="ios-thumbs-up-outline"/>{{item.praiseTimes}}</span>
 									<span>点赞</span>
@@ -42,25 +48,22 @@
              time: '2019-7-18',
              commentText: '',
              isShowC: false,
-             imgList: [
-                 require('../assets/imgs/bg00.jpg'),
-                 require('../assets/imgs/bg01.jpg'),
-                 require('../assets/imgs/bg02.jpg'),
-                 require('../assets/imgs/bg03.jpg'),
-                 require('../assets/imgs/bg04.jpg'),
-                 require('../assets/imgs/bg05.jpg'),
-                 require('../assets/imgs/bg06.jpg'),
-             ],
              pageSize: 10,
              currentPage: 1,
-             dataList: []
+             dataList: [],
+             advList: []
 
          }
      },
      created() {
-         this.getOrderData()
+         this.getOrderData('')
+         this.getAdvData('')
      },
      methods: {
+        //  跳转链接
+        towebsite (website) {
+            window.location.href = website
+        },
          toDetail(id) {
              this.$router.push({
                  path: '/BrowsePage',
@@ -70,31 +73,33 @@
              })
          },
          handleC () {
-             console.log(45)
              this.isShowC = !this.isShowC
          },
-         // 获取列表数据
-    getOrderData() {
-      var data = {
-        pageSize: this.pageSize,
-        pageNum: this.currentPage,
-        keywords: '',
-        startTime: '',
-        endTime: '',
-        isDelete: false
-      };
-      this.$get("/admin/article/getList", data).then(res => {
-        if (res.code == "SUCC") {
-          var res = res.result;
-        //   this.total = res.total;
-          this.dataList = res.data;
-          console.log(this.dataList);
-          
-        } else {
-          this.$Message.warning(res.message);
-        }
-      });
-    },
+         // 获取广告数据 
+        getAdvData() {
+            this.$get("/front/advertisement/getList").then(res => {
+                if (res.code == "SUCC") {
+                var res = res.result;
+                //   this.total = res.total;
+                this.advList = res.data;
+                } else {
+                this.$Message.warning(res.message);
+                }
+            });
+        },
+         // 获取列表数据 
+        getOrderData(id) {
+            this.$get("/front/article/getList?pageNum="+this.currentPage+"&pageSize="+ this.pageSize+"&articleCategoryId="+id).then(res => {
+                if (res.code == "SUCC") {
+                var res = res.result;
+                //   this.total = res.total;
+                this.dataList = res.data;
+                
+                } else {
+                this.$Message.warning(res.message);
+                }
+            })
+        },
      },
  }
  </script>
@@ -107,8 +112,18 @@
     position: relative;
     overflow: scroll
 }
+.carousel .demo-carousel{
+    position: relative
+}
 .carousel .demo-carousel img{
     width: 100%;
+}
+.carousel .demo-carousel .imgtxt{
+    position: absolute;
+    bottom: 40px;
+    left: 20px;
+    font-size: 26px;
+    color: brown
 }
 .comment{
     border-bottom: 20px solid #ececec;

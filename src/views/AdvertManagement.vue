@@ -17,8 +17,12 @@
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="title" label="信息名称"></el-table-column>
-      <el-table-column prop="categoryName" label="所属分类"></el-table-column>
-      <el-table-column prop="发表时间" label="发表时间"></el-table-column>
+      <el-table-column label="所属分类">
+        <template slot-scope="scope">
+          <span>{{scope.row.adType | adType}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="发表时间"></el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
           <el-button @click="open(scope.row.id)" type="text" size="small">编辑</el-button>
@@ -114,6 +118,11 @@ export default {
           }
         })
         .catch(req => {});
+    }
+  },
+  filters: {
+    adType (value) {
+      return value = value = 1 ? '首页广告' : '内页广告'
     }
   }
 };

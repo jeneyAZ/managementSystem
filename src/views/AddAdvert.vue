@@ -9,6 +9,9 @@
             <Form-item label="广告标题：">
                 <i-input :value.sync="formItem.title" v-model="formItem.title" placeholder="请输入信息标题"></i-input>
             </Form-item>
+            <Form-item label="广告链接：">
+                <i-input :value.sync="formItem.forwareUrl" v-model="formItem.forwareUrl" placeholder="请输入广告链接"></i-input>
+            </Form-item>
             <Form-item label="图片：">
                 <i-input :value.sync="formItem.imgurl" readonly style="width:60%"></i-input>
                 <template>
@@ -16,6 +19,15 @@
                         <input type="file" id="fileId" placeholder="点击上传文件" @change="uploadFile($event)">
                     </div>
                 </template>
+            </Form-item>
+            <Form-item label="状态：">
+                <RadioGroup v-model="status">
+                    <Radio label="1">显示</Radio>
+                    <Radio label="0">隐藏</Radio>
+                </RadioGroup>
+            </Form-item>
+             <Form-item label="序号：">
+                <i-input :value.sync="sortNumber" v-model="sortNumber"></i-input>
             </Form-item>
             <Form-item label="备注：">
                 <i-input :value.sync="formItem.remark" v-model="formItem.remark" placeholder="请输入备注"></i-input>
@@ -40,13 +52,16 @@ export default {
     },
     data() {
         return {
-            model: '',
+            model: 1,
             formItem: {
                 title: '',
                 imgurl: '',
                 remark: ''
             },
             kindID: '',
+            sortNumber: null,
+            status: '',
+            forwareUrl: '',
             kindList: [
                 {
                     id: 1,
@@ -88,13 +103,16 @@ export default {
                 return false
             }
             this.$post("/admin/advertisement/getDetail?id="+id).then(res => {
-                console.log(res)
                if (res.code == "SUCC") {
                    var res = res.result
                    this.formItem.title = res.title
                    this.formItem.imgurl = res.imageUrl
                    this.formItem.remark = res.remark
                    this.kindID = res.adType
+                   this.sortNumber = res.sortNumber
+                   this.status = '' + res.status
+                   this.model = res.adType
+                   this.forwareUrl = res.forwardUrl
                    this.$Message.success(res.message)
                } else {
                    this.$Message.warning(res.message)
@@ -107,18 +125,18 @@ export default {
         resetArticle () {
             var data = {
                 adType: this.kindID,
-                forwareUrl: 'aa',
+                forwareUrl: this.forwardUrl,
                 remark: this.formItem.remark,
                 id: this.$route.query.id,
-                sortNumber: 0,
-                status: 1,
+                sortNumber: this.sortNumber,
+                status: this.status,
                 imageUrl: this.formItem.imgurl,
                 title: this.formItem.title
             }
             this.$post("/admin/advertisement/update", data).then(res => {
-                console.log(res)
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)
+                   this.$router.push('/AdvertManagement')
                } else {
                    this.$Message.warning(res.message)
                }
@@ -131,14 +149,16 @@ export default {
             var data = {
                 adType: this.kindID,
                 remark: this.formItem.remark,
-                sortNumber: 0,
-                status: 1,
+                forwareUrl: this.forwardUrl,
+                sortNumber: this.sortNumber,
+                status: this.status,
                 imageUrl: this.formItem.imgurl,
                 title: this.formItem.title
             }
             this.$post("/admin/advertisement/add", data).then(res => {
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)
+                   this.$router.push('/AdvertManagement')
                } else {
                    this.$Message.warning(res.message)
                }
