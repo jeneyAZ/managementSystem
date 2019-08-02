@@ -2,7 +2,7 @@
     <div>
         <i-form :model="formItem" :label-width="80">
             <Form-item label="所属分类：">
-                <i-select :model.sync="model" style="width:100px" @on-change='handleSelectKind($event)' placeholder="请选择分类">
+                <i-select v-model="model" style="width:100px" @on-change='handleSelectKind($event)' placeholder="请选择分类">
                     <i-option v-for="item in kindList" :value="item.id">{{item.name}}</i-option>
                 </i-select>
             </Form-item>
@@ -42,7 +42,7 @@
             <Form-item label="状态：">
                 <RadioGroup v-model="status">
                     <Radio label="1">显示</Radio>
-                    <Radio label="0">隐藏</Radio>
+                    <Radio label="2">隐藏</Radio>
                 </RadioGroup>
             </Form-item>
             <Form-item label="属性标记：">
@@ -70,7 +70,7 @@ export default {
     },
     data() {
         return {
-            model: '',
+            model: null,
             formItem: {
                 title: '',
                 time: '',
@@ -86,7 +86,7 @@ export default {
             zan: '',
             tagList: [],
             kindID: '',
-            status: 1,
+            status: '1',
             sortNumber: '',
             value: [],
             value1: '',
@@ -155,7 +155,7 @@ export default {
                 return false
             }
             this.$post("/admin/article/getDetail?id="+id).then(res => {
-                console.log(res)
+                console.log(res, 111)
                if (res.code == "SUCC") {
                    var res = res.result
                    this.kindID = res.articleCategoryId
@@ -169,6 +169,7 @@ export default {
                    this.formItem.imgurl = res.thumbnailUrl
                    this.formItem.title = res.title
                    this.formItem.intro = res.intro
+                   this.model = res.articleCategoryId
                    this.$Message.success(res.message)
                } else {
                    this.$Message.warning(res.message)

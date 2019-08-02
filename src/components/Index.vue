@@ -56,10 +56,10 @@
                     </div>
                     <div class="h-right">
                         <!-- 消息 -->
-                        <div class="notice-c" @click="info" title="查看新消息">
+                        <!-- <div class="notice-c" @click="info" title="查看新消息">
                             <div :class="{newMsg: hasNewMsg}"></div>
                             <Icon type="ios-notifications-outline" />
-                        </div>
+                        </div> -->
                         <!-- 用户头像 -->
                         <div class="user-img-c">
                             <img :src="userImg">
@@ -73,8 +73,8 @@
                             </div>
                             <DropdownMenu slot="list">
                                 <!-- name标识符 -->
-                                <DropdownItem name="1">修改密码</DropdownItem>
-                                <DropdownItem name="2">基本资料</DropdownItem>
+                                <!-- <DropdownItem name="1">修改密码</DropdownItem>
+                                <DropdownItem name="2">基本资料</DropdownItem> -->
                                 <DropdownItem divided  name="3">退出登陆</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
@@ -140,9 +140,9 @@ export default {
             openMenus: [], // 要打开的菜单名字 name属性
             menuCache: [], // 缓存已经打开的菜单
             showLoading: false, // 是否显示loading
-            hasNewMsg: true, // 是否有新消息
+            // hasNewMsg: true, // 是否有新消息
             isShowRouter: true,
-            msgNum: '10', // 新消息条数
+            // msgNum: '10', // 新消息条数
             // 标签栏         标签标题     路由名称
             // 数据格式 {text: '首页', name: 'home'}
             // 用于缓存打开的路由 在标签栏上展示
@@ -405,30 +405,30 @@ export default {
             this.gotoPage(this.tagsArry[i].name)
         },
         // 消息通知
-        info() {
-            const self = this
-            this.$Notice.info({
-                title: `您有${this.msgNum}条消息`,
-                render(h) {
-                    return h('Button', {
-                        attrs: {
-                            type: 'info',
-                            size: 'small'
-                        },
-                        on: {
-                            click() {
-                                // 点击查看跳转到消息页
-                                self.gotoPage('msg')
-                                self.hasNewMsg = false,
-                                self.msgNum = 0
-                            }
-                        }
-                    }, [
-                        '点击查看',
-                    ])
-                }
-            })
-        },
+        // info() {
+        //     const self = this
+        //     this.$Notice.info({
+        //         title: `您有${this.msgNum}条消息`,
+        //         render(h) {
+        //             return h('Button', {
+        //                 attrs: {
+        //                     type: 'info',
+        //                     size: 'small'
+        //                 },
+        //                 on: {
+        //                     click() {
+        //                         // 点击查看跳转到消息页
+        //                         self.gotoPage('msg')
+        //                         self.hasNewMsg = false,
+        //                         self.msgNum = 0
+        //                     }
+        //                 }
+        //             }, [
+        //                 '点击查看',
+        //             ])
+        //         }
+        //     })
+        // },
         // 菜单栏改变事件
         menuChange(data) {
             this.menuCache = data

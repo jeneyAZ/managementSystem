@@ -50,7 +50,7 @@
       <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="title" label="信息名称"></el-table-column>
       <el-table-column prop="categoryName" label="所属分类"></el-table-column>
-      <el-table-column prop="发表时间" label="发表时间"></el-table-column>
+      <el-table-column prop="createTime" label="发表时间"></el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
           <el-button @click="handleReset(scope.row.id)" type="text" size="small">恢复</el-button>

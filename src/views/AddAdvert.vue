@@ -2,7 +2,7 @@
     <div>
         <i-form :model="formItem" :label-width="80">
             <Form-item label="所属分类：">
-                <i-select :model.sync="model" style="width:100px" @on-change='handleSelectKind($event)' placeholder="请选择分类">
+                <i-select v-model="model" style="width:100px" @on-change='handleSelectKind($event)' placeholder="请选择分类">
                     <i-option v-for="item in kindList" :value="item.id">{{item.name}}</i-option>
                 </i-select>
             </Form-item>
@@ -23,7 +23,7 @@
             <Form-item label="状态：">
                 <RadioGroup v-model="status">
                     <Radio label="1">显示</Radio>
-                    <Radio label="0">隐藏</Radio>
+                    <Radio label="2">隐藏</Radio>
                 </RadioGroup>
             </Form-item>
              <Form-item label="序号：">
@@ -56,12 +56,12 @@ export default {
             formItem: {
                 title: '',
                 imgurl: '',
-                remark: ''
+                remark: '',
+                forwareUrl: ''
             },
             kindID: '',
             sortNumber: null,
             status: '',
-            forwareUrl: '',
             kindList: [
                 {
                     id: 1,
@@ -103,6 +103,7 @@ export default {
                 return false
             }
             this.$post("/admin/advertisement/getDetail?id="+id).then(res => {
+                console.log(res.result)
                if (res.code == "SUCC") {
                    var res = res.result
                    this.formItem.title = res.title
@@ -111,8 +112,8 @@ export default {
                    this.kindID = res.adType
                    this.sortNumber = res.sortNumber
                    this.status = '' + res.status
-                   this.model = res.adType
-                   this.forwareUrl = res.forwardUrl
+                   this.model = res.status
+                   this.formItem.forwareUrl = res.forwardUrl
                    this.$Message.success(res.message)
                } else {
                    this.$Message.warning(res.message)
@@ -125,7 +126,7 @@ export default {
         resetArticle () {
             var data = {
                 adType: this.kindID,
-                forwareUrl: this.forwardUrl,
+                forwareUrl: this.formItem.forwardUrl,
                 remark: this.formItem.remark,
                 id: this.$route.query.id,
                 sortNumber: this.sortNumber,
@@ -149,7 +150,7 @@ export default {
             var data = {
                 adType: this.kindID,
                 remark: this.formItem.remark,
-                forwareUrl: this.forwardUrl,
+                forwareUrl: this.formItem.forwardUrl,
                 sortNumber: this.sortNumber,
                 status: this.status,
                 imageUrl: this.formItem.imgurl,

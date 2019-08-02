@@ -6,16 +6,30 @@
             <span class="time">发表于：{{detailData.updateTime}}</span><i class="kind">{{detailData.categoryName}}</i>
             <div class="articleBox" v-html="detailData.content"></div>
             <div class="opration">
-                <div class="comm">
-                    <Icon type="ios-chatbubble"></Icon>
-                    <span @click="handleC(0)">评论</span>
-                    <div v-if="isShowC" class="commBox">
-                         <i-input type="textarea" v-model="commentText" :rows="4" placeholder="请输入..."></i-input>
-                         <Button type="primary" long @click="submitComm()">提交</Button>
+                <div class="boxsss">
+                    <div class="read">
+                        阅读：{{detailData.browseTimes}}
+                    </div>
+                    <div class="zan" @click="clickZan(0, '')">
+                        <Icon type="ios-thumbs-up-outline"/>{{detailData.praiseTimes}}赞
                     </div>
                 </div>
-                <div class="zan" @click="clickZan(0, '')">
-                    <Icon type="ios-thumbs-up-outline"/>{{detailData.praiseTimes}}赞
+                <div class="comm">
+                    <span @click="handleC(0)">评论</span>
+                    <div v-if="isShowC" class="commBox">
+                        <el-form label-position="right" label-width="80px" :model="formLabelAlign">
+                            <el-form-item label="昵称：">
+                                <el-input v-model="userName" placeholder="请输入昵称"></el-input>
+                            </el-form-item>
+                            <el-form-item label="头像：">
+                                <el-input v-model="userUrl" placeholder="请填写Url绝对路径，http开头"></el-input>
+                            </el-form-item>
+                            <el-form-item label="留言：">
+                                <el-input type="textarea" v-model="commentText" placeholder="留言将由平台筛选后显示，对所人可见"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <Button type="primary" long @click="submitComm()">提交</Button>
+                    </div>
                 </div>
             </div>
             <div class="comment">
@@ -39,7 +53,18 @@
             </div>
             <div class="appeal">
                 <div v-if="isShowC2" class="commBox">
-                     <i-input type="textarea" v-model="appealText" :rows="4" placeholder="请输入..."></i-input>
+                     <!-- <i-input type="textarea" v-model="appealText" :rows="4" placeholder="请输入..."></i-input> -->
+                      <el-form label-position="right" label-width="80px" :model="formLabelAlign">
+                            <el-form-item label="姓名：">
+                                <el-input v-model="name" placeholder=""></el-input>
+                            </el-form-item>
+                            <el-form-item label="电话：">
+                                <el-input v-model="phone" placeholder=""></el-input>
+                            </el-form-item>
+                            <el-form-item label="留言：">
+                                <el-input type="textarea" v-model="appealText" placeholder="请填写投诉原因"></el-input>
+                            </el-form-item>
+                        </el-form>
                      <i-button type="success" @click="submitAppeal()" long>提交</i-button>
                 </div>
                 <p class="appealsss" @click="handleC(1)">—— 投诉 ——</p>
@@ -53,9 +78,10 @@
      name: 'BrowsePage',
      data() {
          return {
-             userName: '你认识',
-             userUrl: 'uijuhhi',
-             phone: '15514538697',
+             userName: '',
+             userUrl: '',
+             phone: '',
+             name: '',
              commentText: '',
              appealText: '',
              isShowC: false,
@@ -95,7 +121,7 @@
         },
         // 获取文章评论
         getAppeal () {
-            this.$post("/front/article_comment/getList?pageNum=1&pageSize=100&articleId=1").then(res => {
+            this.$post("/front/article_comment/getList?pageNum=1&pageSize=100&articleId="+this.detailData.id).then(res => {
                 console.log(res)
                if (res.code == "SUCC") {
                    this.appealData = res.result.data
@@ -124,6 +150,7 @@
             this.$post("/front/article_comment/submitComment?articleId="+this.detailData.id+"&nickname="+this.userName+"&portraitUrl="+this.userUrl+"&content="+this.commentText).then(res => {
                if (res.code == "SUCC") {
                    this.getAppeal()
+                   this.isShowC = false
                    this.$Message.success(res.message)
                } else {
                    this.$Message.warning(res.message)
@@ -134,9 +161,10 @@
         },
          // 投诉
         submitAppeal () {
-            this.$post("/front/article_complaint/submitComplaint?articleId="+this.detailData.id+"&userName="+this.userName+"&tel="+this.phone+"&content="+this.appealText).then(res => {
+            this.$post("/front/article_complaint/submitComplaint?articleId="+this.detailData.id+"&userName="+this.name+"&tel="+this.phone+"&content="+this.appealText).then(res => {
                if (res.code == "SUCC") {
                    this.getAppeal()
+                   this.isShowC2 = !this.isShowC2
                    this.$Message.success(res.message)
                } else {
                    this.$Message.warning(res.message)
@@ -171,6 +199,9 @@
 }
 .contant{
     padding-top: 70px
+}
+.contant img{
+    width: 85%
 }
 .contant .title{
     font-size: 24px;
@@ -288,10 +319,20 @@
 .appealsss{
     cursor: pointer   
 }
+.comm{
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 2px solid #ececec
+}
 .comm span{
     cursor: pointer
 }
 .zan{
     cursor: pointer
+}
+.boxsss{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between
 }
  </style>

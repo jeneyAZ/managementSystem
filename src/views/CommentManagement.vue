@@ -12,7 +12,7 @@
       <el-table-column prop="nickname" label="昵称"></el-table-column>
       <el-table-column label="头像">
         <template slot-scope="scope">
-            <img :src="scope.row.portraitUrl" alt="">
+            <img :src="scope.row.portraitUrl" alt="" style="width: 40px;min-height:50px">
         </template>
       </el-table-column>
       <el-table-column prop="status" label="状态"></el-table-column>

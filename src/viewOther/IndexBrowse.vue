@@ -64,7 +64,7 @@
         towebsite (website) {
             window.location.href = website
         },
-         toDetail(id) {
+        toDetail(id) {
              this.$router.push({
                  path: '/BrowsePage',
                  query: {
@@ -99,7 +99,7 @@
                 this.$Message.warning(res.message);
                 }
             })
-        },
+        }
      },
  }
  </script>

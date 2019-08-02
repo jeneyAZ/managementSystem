@@ -1,13 +1,62 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
 Vue.use(Router)
+
+// import IndexBrowse from '../viewOther/IndexBrowse.vue';
+// import Login from '../components/Login.vue';
+// import BrowsePage from '../viewOther/BrowsePage.vue';
+// import Commont from '../viewOther/commont.vue';
+// import Index from '../components/Index.vue';
+// import Home from '../views/Home.vue';
+// import ClassifiedManagement from '../views/ClassifiedManagement.vue';
+// import ArticleManagement from '../views/ArticleManagement.vue';
+// import AddArticle from '../views/AddArticle.vue';
+// import RecycleBin from '../views/RecycleBin.vue';
+// import AppealManagement from '../views/AppealManagement.vue';
+// import CommentManagement from '../views/CommentManagement.vue';
+// import CommentDetail from '../views/CommentDetail.vue';
+// import AdvertManagement from '../views/AdvertManagement.vue';
+// import AddAdvert from '../views/AddAdvert.vue';
+
+// const routes = [
+//     {
+//         path: '/', component: Home,
+//         children: [
+//             { path: "/ClassifiedManagement", component: ClassifiedManagement },
+//             { path: "/ArticleManagement", component: ArticleManagement },
+//             { path: "/AddArticle", component: AddArticle },
+//             { path: "/RecycleBin", component: RecycleBin },
+//             { path: "/AppealManagement", component: AppealManagement },
+//             { path: "/CommentManagement", component: CommentManagement },
+//             { path: "/CommentDetail", component: CommentDetail },
+//             { path: "/AdvertManagement", component: AdvertManagement },
+//             { path: "/AddAdvert", component: AddAdvert },
+//         ]
+//     },
+//     { path: "/Login", name: "Login", component: Login },
+//     { path: "/", name: "IndexBrowse", component: IndexBrowse },
+//     { path: "/BrowsePage", name: "BrowsePage", component: BrowsePage },
+//     { path: "/Commont", name: "Commont", component: Commont },
+//     { path: "/Index", name: "Index", component: Index },
+
+
+// ]
+
+// const router = new Router({
+//     mode: 'history',
+//     routes
+// })
 
 const commonRoutes = [
     {
         path: '/',
         name: 'indexBrowse',
         component: () => import('../viewOther/IndexBrowse.vue')
+    },
+    {
+        path: '/admin',
+        name: 'login',
+        component: () => import('../components/Login.vue')
     },
     {
         path: '/login',
@@ -31,7 +80,7 @@ const commonRoutes = [
         component: () => import('../components/Index.vue')
     },
 
-    { path: '/', redirect: '/index'},
+    { path: '/', redirect: '/login'},
 ]
 
 // 需要通过后台数据来生成的组件
@@ -105,6 +154,7 @@ export const asyncRoutes = {
 }
 
 const createRouter = () => new Router({
+    mode: "history",
     routes: commonRoutes
 })
 
