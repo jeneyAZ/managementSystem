@@ -10,8 +10,14 @@
                 </Carousel-item>
             </Carousel>
         </div>
-        <div class="tag">
-            
+        <div class="tagbox">
+            <h3>文章分类</h3>
+            <ul class="tagul">
+                <li class="tagli" v-for="(item, index) in tagList" :key="index" @click="getOrderData(item.id)">
+                    <img src="../assets/imgs/user.jpg" alt="">
+                    <span class="tagspan">{{item.name}}</span>
+                </li>
+            </ul>
         </div>
         <div class="contant">
             <div class="comment">
@@ -20,8 +26,8 @@
                     <li v-for="(item, index) in dataList" :key="index" @click="toDetail(item.id)">
 						<div class="list_block_l"><img :src="item.thumbnailUrl" alt=""></div>
 						<div class="list_block_r">
-							<div class="list_block_r_info">{{item.title}}
-                                <!-- <span>{{item.}}</span> -->
+							<div class="list_block_r_info">
+                                <span>{{item.title}}</span>
                             </div>
 							<div class="list_block_r_text">{{item.intro}}</div>
 							<div class="list_block_r_bottom">
@@ -48,16 +54,18 @@
              time: '2019-7-18',
              commentText: '',
              isShowC: false,
-             pageSize: 10,
+             pageSize: 100,
              currentPage: 1,
              dataList: [],
-             advList: []
+             advList: [],
+             tagList: []
 
          }
      },
      created() {
          this.getOrderData('')
          this.getAdvData('')
+         this.getTag()
      },
      methods: {
         //  跳转链接
@@ -76,7 +84,7 @@
          handleC () {
              this.isShowC = !this.isShowC
          },
-         // 获取广告数据 
+         // 获取广告数据
         getAdvData() {
             this.$get("/front/advertisement/getList").then(res => {
                 if (res.code == "SUCC") {
@@ -88,24 +96,65 @@
                 }
             });
         },
-         // 获取列表数据 
+         // 获取列表数据
         getOrderData(id) {
             this.$get("/front/article/getList?pageNum="+this.currentPage+"&pageSize="+ this.pageSize+"&articleCategoryId="+id).then(res => {
                 if (res.code == "SUCC") {
                 var res = res.result;
                 //   this.total = res.total;
                 this.dataList = res.data;
-                
+
                 } else {
                 this.$Message.warning(res.message);
                 }
             })
-        }
+        },
+         // 获取标签
+        getTag () {
+            this.$get("/front/article_category/getList").then(res => {
+                if (res.code == "SUCC") {
+                var res = res.result;
+                console.log(res, 'sass')
+                this.tagList = res.data;
+                } else {
+                this.$Message.warning(res.message);
+                }
+            });
+         },
      },
  }
  </script>
 
- <style scoped>
+<style scoped>
+ .tagbox{
+     margin: 20px 0;
+     height: auto;
+ }
+ .tagul{
+     margin-top: 5px;
+     padding: 10px 5px;
+     border-bottom: 1px solid #f1f1f1;
+     border-top: 1px solid #f1f1f1;
+     width: 100%;
+     display: flex;
+     justify-content: space-between;
+     overflow-x:scroll
+ }
+.tagbox h3{
+    color: #222;
+    font-size: 16px;
+ }
+ .tagli{
+     text-align: center;
+     margin: 0 10px;
+     font-size: 14px;
+     color: brown
+
+ }
+ .tagli img{
+     width: 40px;
+     border-radius: 50%
+ }
 .Browse{
     max-width: 640px;
     height: 100%;
@@ -127,7 +176,7 @@
     color: brown
 }
 .comment{
-    border-bottom: 20px solid #ececec;
+    border-bottom: 2px solid #ececec;
     padding: 0 7px
 }
 .comment ul li{
@@ -158,6 +207,7 @@
 .comment .list_block_r_text {
     color: #222;
     font-size: 14px;
+    width: 75%
 }
 .comment .list_block_r_bottom {
     font-size: 14px;
