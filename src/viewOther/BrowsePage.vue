@@ -87,10 +87,19 @@
              isShowC: false,
              isShowC2: false,
              detailData: {},
-             appealData: []
+             appealData: [],
+             titleId: null
          }
      },
      created() {
+         if (this.$route.query.id) {
+             this.titleId = this.$route.query.id
+             console.log(234)
+         } else {
+             this.titleId = sessionStorage.getItem('titleId')
+             console.log(123);
+             
+         }
          this.getArticledetail()
          this.getAppeal()
      },
@@ -105,11 +114,7 @@
          },
         // 获取文章详情
         getArticledetail () {
-            var id = this.$route.query.id
-            if (id == undefined) {
-                return false
-            }
-            this.$post("/front/article/getDetail?id="+id).then(res => {
+            this.$post("/front/article/getDetail?id="+this.titleId).then(res => {
                if (res.code == "SUCC") {
                    this.detailData = res.result
                } else {
@@ -121,8 +126,7 @@
         },
         // 获取文章评论
         getAppeal () {
-            this.$post("/front/article_comment/getList?pageNum=1&pageSize=100&articleId="+this.detailData.id).then(res => {
-                console.log(res)
+            this.$post("/front/article_comment/getList?pageNum=1&pageSize=100&articleId="+this.titleId).then(res => {
                if (res.code == "SUCC") {
                    this.appealData = res.result.data
                } else {

@@ -65,7 +65,8 @@
             window.location.href = website
         },
         toDetail(id) {
-             this.$router.push({
+            sessionStorage.setItem('titleId', id)
+            this.$router.push({
                  path: '/BrowsePage',
                  query: {
                      id : id
