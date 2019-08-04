@@ -94,11 +94,8 @@
      created() {
          if (this.$route.query.id) {
              this.titleId = this.$route.query.id
-             console.log(234)
          } else {
              this.titleId = sessionStorage.getItem('titleId')
-             console.log(123);
-             
          }
          this.getArticledetail()
          this.getAppeal()
@@ -180,12 +177,6 @@
      },
  }
  </script>
-<style>
-.contant img{
-     width: 100% !important;
-     transform: scale(0.8) !important
- }
-</style>
 
  <style scoped>
 .Browse{
@@ -327,7 +318,7 @@
     padding-top: 20px
 }
 .appealsss{
-    cursor: pointer
+    cursor: pointer   
 }
 .comm{
     margin-top: 10px;

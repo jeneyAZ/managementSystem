@@ -131,6 +131,8 @@ import { resetRouter } from '../router'
 
 export default {
     name: 'index',
+    // 注入reload, AppVue中注册
+    inject: ['reload'],
     data () {
         return {
             // 用于储存页面路径
@@ -216,7 +218,11 @@ export default {
                 this.crumbs = '404'
                 return
             }
-
+            console.log(to.name);
+            if (to.name == 'AddArticle') {
+                this.reloadPage()
+            }
+            
             if (!this.keepAliveData.includes(name)) {
                 // 如果标签超过8个 则将第一个标签删除
                 if (this.tagsArry.length == 8) {

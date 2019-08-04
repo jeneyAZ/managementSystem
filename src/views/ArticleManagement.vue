@@ -92,6 +92,7 @@ export default {
   },
   methods: {
     open (id) {
+      sessionStorage.setItem('articleId',id)
       this.$router.push({
         path: '/AddArticle',
         query: {

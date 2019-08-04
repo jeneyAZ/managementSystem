@@ -65,6 +65,8 @@ import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css'
 export default {
     name: 'AddArticle',
+    // 注入reload, AppVue中注册
+    inject: ['reload'],
     components: {
         quillEditor
     },
@@ -90,10 +92,16 @@ export default {
             sortNumber: '',
             value: [],
             value1: '',
-            kindList: []
+            kindList: [],
+            articleId: null
         }
     },
     created() {
+        if (this.$route.query.id) {
+             this.articleId = this.$route.query.id
+         } else {
+             this.articleId = sessionStorage.getItem('articleId')
+         }
         this.kindList = JSON.parse(localStorage.getItem('kindTxt'))
         this.getArticledetail()
         this.getTag()
@@ -150,7 +158,7 @@ export default {
         },
         // 获取文章详情
         getArticledetail () {
-            var id = this.$route.query.id
+            var id = this.articleId
             if (id == undefined) {
                 return false
             }
@@ -184,7 +192,7 @@ export default {
                 articleCategoryId: this.kindID,
                 browseTimes: this.Browsing,
                 content: this.content,
-                id: this.$route.query.id,
+                id: this.articleId,
                 praiseTimes: this.zan,
                 sortNumber: this.sortNumber,
                 status: this.status,

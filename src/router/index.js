@@ -80,7 +80,7 @@ const commonRoutes = [
         component: () => import('../components/Index.vue')
     },
 
-    { path: '/', redirect: '/login'},
+    { path: '/', redirect: '/admin'},
 ]
 
 // 需要通过后台数据来生成的组件
