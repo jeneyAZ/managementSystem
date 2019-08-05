@@ -60,7 +60,7 @@ export default {
 		    // })
 		    // .catch(req => {
 		    // })
-            if (this.account === 'admin' && this.pwd === '123456') {
+            if (this.account === 'admin' && this.pwd === 'adminADMIN123456') {
                 this.isShowLoading = true
                 // 登陆成功 设置用户信息
                 localStorage.setItem('userImg', 'https://avatars3.githubusercontent.com/u/22117876?s=460&v=4')

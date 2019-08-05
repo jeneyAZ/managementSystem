@@ -50,8 +50,8 @@ Vue.use(Router)
 const commonRoutes = [
     {
         path: '/',
-        name: 'indexBrowse',
-        component: () => import('../viewOther/IndexBrowse.vue')
+        name: 'login',
+        component: () => import('../components/Login.vue')
     },
     {
         path: '/admin',
@@ -80,7 +80,7 @@ const commonRoutes = [
         component: () => import('../components/Index.vue')
     },
 
-    { path: '/', redirect: '/admin'},
+    { path: '/', redirect: '/index'},
 ]
 
 // 需要通过后台数据来生成的组件
