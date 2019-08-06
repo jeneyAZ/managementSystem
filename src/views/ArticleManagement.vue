@@ -52,6 +52,11 @@
       <el-table-column prop="createTime" label="发表时间"></el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
+          <el-button @click="copy(scope.row.id)" type="text" size="small">查看短连接</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="120">
+        <template slot-scope="scope">
           <el-button @click="open(scope.row.id)" type="text" size="small">编辑</el-button>
           <el-button style="color:red" @click="handleDel(scope.row.id)" type="text" size="small">删除</el-button>
         </template>
@@ -65,6 +70,19 @@
       @on-change="handleCurrentPage($event)"
       @on-page-size-change="handlePageSize($event)"
     />
+    <el-dialog
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+      <p style="text-align: center">{{link}}</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button
+        v-clipboard:copy="link"
+        v-clipboard:success="onCopy"
+        v-clipboard:error="onError"
+        @click="centerDialogVisible = false">复制</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -83,7 +101,9 @@ export default {
       endTime: "",
       startTime: "",
       selectArr: [],
-      ids: ''
+      ids: '',
+      centerDialogVisible: false,
+      link: ''
     };
   },
   created() {
@@ -91,7 +111,28 @@ export default {
     this.kindList = JSON.parse(localStorage.getItem('kindTxt'))
   },
   methods: {
+    // 复制
+    copy (id) {
+       this.$post("/admin/article/getShareUrl?id=" + id)
+        .then(res => {
+          if (res.code == "SUCC") {
+            this.link = res.result
+            this.centerDialogVisible = true
+          } else {
+            this.$Message.warning(res.message);
+          }
+        })
+        .catch(req => {});
+    },
+    onCopy(e){
+      this.$Message.seccess("成功")
+    },
+    // 复制失败
+    onError(e){
+      this.$Message.warning("失败")
+    },
     open (id) {
+      console.log(id, 'id')
       sessionStorage.setItem('articleId',id)
       this.$router.push({
         path: '/AddArticle',

@@ -71,11 +71,18 @@ export default {
                     id: 2,
                     name: '内页广告'
                 }
-            ]
+            ],
+            adverId: ''
         }
     },
     created() {
+        if (this.$route.query.id) {
+             this.adverId = this.$route.query.id
+         } else {
+             this.adverId = sessionStorage.getItem('adverId')
+         }
         this.getArticledetail()
+        console.log(status)
     },
     methods: {
         // 类型选择触发
@@ -98,12 +105,11 @@ export default {
         },
         // 获取广告详情
         getArticledetail () {
-            var id = this.$route.query.id
+            var id = this.adverId
             if (id == undefined) {
                 return false
             }
             this.$post("/admin/advertisement/getDetail?id="+id).then(res => {
-                console.log(res.result)
                if (res.code == "SUCC") {
                    var res = res.result
                    this.formItem.title = res.title
@@ -111,7 +117,7 @@ export default {
                    this.formItem.remark = res.remark
                    this.kindID = res.adType
                    this.sortNumber = res.sortNumber
-                   this.status = '' + res.status
+                   this.status = res.status
                    this.model = res.status
                    this.formItem.forwareUrl = res.forwardUrl
                    this.$Message.success(res.message)
@@ -126,14 +132,15 @@ export default {
         resetArticle () {
             var data = {
                 adType: this.kindID,
-                forwareUrl: this.formItem.forwardUrl,
+                forwareUrl: this.formItem.forwareUrl,
                 remark: this.formItem.remark,
-                id: this.$route.query.id,
+                id: this.adverId,
                 sortNumber: this.sortNumber,
                 status: this.status,
                 imageUrl: this.formItem.imgurl,
                 title: this.formItem.title
             }
+            console.log(data, '456')
             this.$post("/admin/advertisement/update", data).then(res => {
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)

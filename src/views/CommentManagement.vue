@@ -15,7 +15,11 @@
             <img :src="scope.row.portraitUrl" alt="" style="width: 40px;min-height:50px">
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="状态"></el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{scope.row.status | filterStatus}}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="createTime" label="日期"></el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
@@ -88,6 +92,7 @@ export default {
       });
     },
     open(id) {
+        sessionStorage.setItem('commonId',id)
         this.$router.push({
             path: '/CommentDetail',
             query: {
@@ -95,8 +100,13 @@ export default {
             }
         })
     }
+  },
+  filters: {
+    filterStatus (value) {
+      return value == 1 ? '未读' : '已读'
+    }
   }
-};
+}
 </script>
 
 <style scoped>

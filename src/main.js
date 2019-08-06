@@ -13,6 +13,9 @@ Vue.config.productionTip = false
 Vue.use(iView)
 Vue.use(ElementUI)
 
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
+
 import { getHttp, postHttp } from './request/http'
 Vue.prototype.$get=getHttp
 Vue.prototype.$post=postHttp

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <i-form :model="formItem" :label-width="80">
+        <i-form :model="formItem" :label-width="90">
             <Form-item label="所属分类：">
                 <i-select v-model="model" style="width:100px" @on-change='handleSelectKind($event)' placeholder="请选择分类">
                     <i-option v-for="item in kindList" :value="item.id">{{item.name}}</i-option>
@@ -11,6 +11,9 @@
             </Form-item>
             <Form-item label="文章简介：">
                 <i-input :value.sync="formItem.intro" v-model="formItem.intro" placeholder="请输入文章简介"></i-input>
+            </Form-item>
+            <Form-item label="文章短连接：">
+                <i-input :value.sync="formItem.shareUrl" v-model="formItem.shareUrl" placeholder="请输入短连接"></i-input>
             </Form-item>
             <Form-item label="图片：">
                 <i-input :value.sync="formItem.imgurl" readonly style="width:60%"></i-input>
@@ -77,7 +80,8 @@ export default {
                 title: '',
                 time: '',
                 imgurl: '',
-                intro: ''
+                intro: '',
+                shareUrl: ''
             },
             // 文本编辑
             content: '',
@@ -108,10 +112,10 @@ export default {
     },
     methods: {
         // 获取标签
-        getTag () { 
+        getTag () {
             var data = {
                 pageNum: 1,
-                pageSize: 10
+                pageSize: 100
             }
             this.$get("/admin/article_tag/getList", data).then(res => {
                 if (res.code == "SUCC") {
@@ -126,7 +130,7 @@ export default {
         tagChange (val) {
             this.value1 = val.join(",")
             console.log(this.value1);
-            
+
         },
         // 类型选择触发
         handleSelectKind (val) {
@@ -147,7 +151,7 @@ export default {
          }
         },
         // 富文本
-        onEditorReady(editor) {}, // 准备编辑器 
+        onEditorReady(editor) {}, // 准备编辑器
         onEditorBlur(val){}, // 失去焦点事件
         onEditorFocus(val){}, // 获得焦点事件
         onEditorChange(val){}, // 内容改变事件
@@ -163,7 +167,6 @@ export default {
                 return false
             }
             this.$post("/admin/article/getDetail?id="+id).then(res => {
-                console.log(res, 111)
                if (res.code == "SUCC") {
                    var res = res.result
                    this.kindID = res.articleCategoryId
@@ -178,6 +181,7 @@ export default {
                    this.formItem.title = res.title
                    this.formItem.intro = res.intro
                    this.model = res.articleCategoryId
+                   this.shareUrl = res.shareUrl
                    this.$Message.success(res.message)
                } else {
                    this.$Message.warning(res.message)

@@ -54,16 +54,6 @@ const commonRoutes = [
         component: () => import('../components/Login.vue')
     },
     {
-        path: '/admin',
-        name: 'login',
-        component: () => import('../components/Login.vue')
-    },
-    {
-        path: '/login',
-        name: 'login',
-        component: () => import('../components/Login.vue')
-    },
-    {
         path: '/browsePage',
         name: 'BrowsePage',
         component: () => import('../viewOther/BrowsePage.vue')
@@ -135,12 +125,6 @@ export const asyncRoutes = {
         name: 'AddAdvert',
         component: () => import('../views/AddAdvert.vue')
     },
-
-    'password': {
-        path: '/password',
-        name: 'password',
-        component: () => import('../views/Password.vue')
-    },
     'msg': {
         path: '/msg',
         name: 'msg',
@@ -154,7 +138,6 @@ export const asyncRoutes = {
 }
 
 const createRouter = () => new Router({
-    mode: "history",
     routes: commonRoutes
 })
 

@@ -32,6 +32,16 @@
                     </div>
                 </div>
             </div>
+            <div class="copys">
+                <p>特别提示：</p>
+                <!-- <Icon type="arrow-down-a"></Icon> -->
+                <h4>{{detailData.shareUrl}}</h4>
+                <el-button
+                v-clipboard:copy="detailData.shareUrl"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError"
+                @click="centerDialogVisible = false">点击复制</el-button>
+            </div>
             <div class="comment">
                 <h3 class="list_title">精彩评论<Icon type=" checkmark"></Icon></h3>
                 <ul>
@@ -101,6 +111,13 @@
          this.getAppeal()
      },
      methods: {
+        onCopy(e){
+            this.$Message.success("成功")
+        },
+        // 复制失败
+        onError(e){
+            this.$Message.warning("失败")
+        },
          handleC (idx) {
              if (idx == 0) {
                  this.isShowC = !this.isShowC
@@ -179,6 +196,18 @@
  </script>
 
  <style scoped>
+ .copys{
+     text-align: center;
+         margin: 15px 0px
+ }
+ .copys p {
+     color: red;
+     font-size: 20px
+ }
+ .copys h4{
+     font-size: 14px;
+     color: #333
+ }
 .Browse{
     max-width: 640px;
     height: 100%;
@@ -318,7 +347,7 @@
     padding-top: 20px
 }
 .appealsss{
-    cursor: pointer   
+    cursor: pointer
 }
 .comm{
     margin-top: 10px;

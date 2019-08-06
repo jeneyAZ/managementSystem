@@ -218,11 +218,16 @@ export default {
                 this.crumbs = '404'
                 return
             }
-            console.log(to.name);
             if (to.name == 'AddArticle') {
                 this.reloadPage()
             }
-            
+            if (to.name == 'AddAdvert') {
+                this.reloadPage()
+            }
+            if (to.name == 'CommentDetail') {
+                this.reloadPage()
+            }
+
             if (!this.keepAliveData.includes(name)) {
                 // 如果标签超过8个 则将第一个标签删除
                 if (this.tagsArry.length == 8) {
@@ -257,12 +262,21 @@ export default {
         },
     },
     methods: {
+        submit () {
+            console.log(1322)
+        },
         // 判断当前标签页是否激活状态
         isActive(name) {
             return this.$route.name === name
         },
         // 跳转页面 路由名称和参数
         gotoPage(name, params) {
+           // if (name == 'AddArticle') {
+            //     sessionStorage.removeItem('articleId')
+            // }
+            // if (name == 'AddAdvert') {
+            //     sessionStorage.removeItem('adverId')
+            // }
             this.currentPage = name
             this.crumbs = this.paths[name]
             this.$router.replace({name, params})
@@ -278,14 +292,14 @@ export default {
         // 用户操作
         userOperate(name) {
             switch(name) {
-                case '1':
-                    // 修改密码
-                    this.gotoPage('password')
-                    break
-                case '2':
-                    // 基本资料
-                    this.gotoPage('userinfo')
-                    break
+                // case '1':
+                //     // 修改密码
+                //     this.gotoPage('password')
+                //     break
+                // case '2':
+                //     // 基本资料
+                //     this.gotoPage('userinfo')
+                //     break
                 case '3':
                     // 退出登陆 清除用户资料
                     localStorage.setItem('token', '')

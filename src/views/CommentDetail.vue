@@ -49,18 +49,24 @@ export default {
         praiseTimes: 0,
         reply: '',
         replyPraiseTimes: 0
-      }
+      },
+      commonId: ''
 };
   },
   created() {
+    if (this.$route.query.id) {
+             this.commonId = this.$route.query.id
+    } else {
+        this.commonId = sessionStorage.getItem('commonId')
+    }
     this.getDetailData()
   },
   methods: {
     // 获取评论详情
     getDetailData() {
-      var id = this.$route.query.id
+      var id = this.commonId
       console.log(id);
-      
+
       if (id == undefined) {
           return false
       }
@@ -103,7 +109,7 @@ export default {
           portraitUrl: this.form.portraitUrl,
           content: this.form.content,
           reply: this.form.reply,
-          id: this.$route.query.id,
+          id: this.commonId,
           replyPraiseTimes: this.form.replyPraiseTimes,
           praiseTimes: this.form.praiseTimes,
           isTop: this.form.isTop,

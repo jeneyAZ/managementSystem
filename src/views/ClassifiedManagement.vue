@@ -14,7 +14,7 @@
             <el-table-column prop="sortNumber" label="排序"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button @click="open(scope.row.id)" type="text" size="small">编辑</el-button>
+                    <el-button @click="open(scope.row.id, scope.row.name)" type="text" size="small">编辑</el-button>
                     <el-button style="color:red" @click="handleDel(scope.row.id)" type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { log } from 'util';
 export default {
     name: 'ClassifiedManagement',
     data() {
@@ -37,6 +38,7 @@ export default {
         }
     },
     created() {
+        this.getkindData()
         this.getOrderData()
     },
     methods: {
@@ -60,7 +62,21 @@ export default {
                     var res = res.result
                     this.total = res.total
                     this.dataList = res.data
-                    localStorage.setItem('kindTxt', JSON.stringify(res.data))
+                    // localStorage.setItem('kindTxt', JSON.stringify(res.data))
+                } else {
+                   this.$Message.warning(res.message)
+               }
+            })
+        },
+        // 获取列表数据
+        getkindData () {
+            var data = {
+                pageSize: 100,
+                pageNum: 1
+            }
+            this.$get("/admin/article_category/getList", data).then(res=>{
+                if (res.code == "SUCC") {
+                    localStorage.setItem('kindTxt', JSON.stringify(res.result.data))
                 } else {
                    this.$Message.warning(res.message)
                }
@@ -93,10 +109,11 @@ export default {
 		    })
         },
         // 修改文章分类
-        open(id) {
+        open(id, name) {
             this.$prompt('请输入修改分类名称', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
+                inputValue: name
             }).then(({ value }) => {
                 this.updateName = value
                 this.handleUpdata(id)

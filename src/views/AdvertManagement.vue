@@ -46,7 +46,6 @@ export default {
   name: "ArticleManagement",
   data() {
     return {
-      kindList: [],
       value: "",
       dataList: [],
       total: null,
@@ -61,10 +60,10 @@ export default {
   },
   created() {
     this.getOrderData();
-    this.kindList = JSON.parse(localStorage.getItem('kindTxt'))
   },
   methods: {
     open (id) {
+      sessionStorage.setItem('adverId',id)
       this.$router.push({
         path: '/AddAdvert',
         query: {
