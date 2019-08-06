@@ -65,7 +65,7 @@ export default {
     open (id) {
       sessionStorage.setItem('adverId',id)
       this.$router.push({
-        path: '/AddAdvert',
+        path: '/ResetAdvert',
         query: {
           id: id
         }

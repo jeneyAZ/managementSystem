@@ -54,7 +54,7 @@
                 </CheckboxGroup>
             </Form-item>
             <Form-item>
-                <i-button type="primary" size="large" @click="addArticle()">添加</i-button>
+                <i-button type="warning" size="large" @click="resetArticle()">修改</i-button>
             </Form-item>
         </i-form>
     </div>
@@ -66,7 +66,7 @@ import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css'
 export default {
-    name: 'AddArticle',
+    name: 'ResetArticle',
     // 注入reload, AppVue中注册
     inject: ['reload'],
     components: {
@@ -96,9 +96,17 @@ export default {
             value: [],
             value1: '',
             kindList: [],
+            articleId: null
         }
     },
     created() {
+        if (this.$route.query.id) {
+             this.articleId = this.$route.query.id
+         } else {
+             this.articleId = sessionStorage.getItem('articleId')
+         }
+        this.kindList = JSON.parse(localStorage.getItem('kindTxt'))
+        this.getArticledetail()
         this.getTag()
     },
     methods: {
@@ -151,12 +159,43 @@ export default {
             str = str.replace(/&gt;/g,'>');
             return str;
         },
-        // 添加文章
-        addArticle () {
+        // 获取文章详情
+        getArticledetail () {
+            var id = this.articleId
+            if (id == undefined) {
+                return false
+            }
+            this.$post("/admin/article/getDetail?id="+id).then(res => {
+               if (res.code == "SUCC") {
+                   var res = res.result
+                   this.kindID = res.articleCategoryId
+                   this.Browsing = res.browseTimes
+                   this.content = res.content
+                   this.zan = res.praiseTimes
+                   this.sortNumber = res.sortNumber
+                   this.status = res.status + ''
+                   this.value = res.tagIdList
+                   this.value1 = res.tagIdList.join(',')
+                   this.formItem.imgurl = res.thumbnailUrl
+                   this.formItem.title = res.title
+                   this.formItem.intro = res.intro
+                   this.model = res.articleCategoryId
+                   this.shareUrl = res.shareUrl
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+        // 修改文章
+        resetArticle () {
             var data = {
                 articleCategoryId: this.kindID,
                 browseTimes: this.Browsing,
                 content: this.content,
+                id: this.articleId,
                 praiseTimes: this.zan,
                 sortNumber: this.sortNumber,
                 status: this.status,
@@ -165,7 +204,8 @@ export default {
                 title: this.formItem.title,
                 intro: this.formItem.intro
             }
-            this.$post("/admin/article/add", data).then(res => {
+            this.$post("/admin/article/update", data).then(res => {
+                console.log(res)
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)
                    this.$router.push('/ArticleManagement')
@@ -175,7 +215,7 @@ export default {
 		    })
 		    .catch(req => {
 		    })
-        }
+        },
     },
     mounted() {
         let content = '';  // 请求后台返回的内容字符串

@@ -33,7 +33,7 @@
                 <i-input :value.sync="formItem.remark" v-model="formItem.remark" placeholder="请输入备注"></i-input>
             </Form-item>
             <Form-item>
-                <i-button type="primary" size="large" @click="addArticle()">添加</i-button>
+                <i-button type="warning" size="large" @click="resetArticle()">修改</i-button>
             </Form-item>
         </i-form>
     </div>
@@ -45,7 +45,7 @@ import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css'
 export default {
-    name: 'AddArticle',
+    name: 'ResetAdvert',
     components: {
         quillEditor
     },
@@ -58,9 +58,8 @@ export default {
                 remark: '',
                 forwareUrl: ''
             },
-            kindID: '',
             sortNumber: null,
-            status: '',
+            status: '1',
             kindList: [
                 {
                     id: 1,
@@ -75,11 +74,19 @@ export default {
         }
     },
     created() {
+        if (this.$route.query.id) {
+             this.adverId = this.$route.query.id
+         } else {
+             this.adverId = sessionStorage.getItem('adverId')
+         }
+        this.getArticledetail()
+        console.log(this.status, 'status')
     },
     methods: {
         // 类型选择触发
         handleSelectKind (val) {
-            this.kindID = val
+            console.log(val, '456')
+            this.model = val
         },
         // 文件上传
         uploadFile (event, i) {
@@ -95,18 +102,44 @@ export default {
              that.formItem.imgurl = e.target.result
          }
         },
-        // 添加广告
-        addArticle () {
+        // 获取广告详情
+        getArticledetail () {
+            var id = this.adverId
+            if (id == undefined) {
+                return false
+            }
+            this.$post("/admin/advertisement/getDetail?id="+id).then(res => {
+               if (res.code == "SUCC") {
+                   var res = res.result
+                   this.formItem.title = res.title
+                   this.formItem.imgurl = res.imageUrl
+                   this.formItem.remark = res.remark
+                   this.model = res.adType
+                   this.sortNumber = res.sortNumber
+                   this.status = res.status + ''
+                   this.formItem.forwareUrl = res.forwardUrl
+                   this.$Message.success(res.message)
+               } else {
+                   this.$Message.warning(res.message)
+               }
+		    })
+		    .catch(req => {
+		    })
+        },
+        // 修改广告
+        resetArticle () {
             var data = {
-                adType: this.kindID,
+                adType: this.model,
+                forwareUrl: this.formItem.forwareUrl,
                 remark: this.formItem.remark,
-                forwareUrl: this.formItem.forwardUrl,
+                id: this.adverId,
                 sortNumber: this.sortNumber,
                 status: this.status,
                 imageUrl: this.formItem.imgurl,
                 title: this.formItem.title
             }
-            this.$post("/admin/advertisement/add", data).then(res => {
+            console.log(data, '456')
+            this.$post("/admin/advertisement/update", data).then(res => {
                if (res.code == "SUCC") {
                    this.$Message.success(res.message)
                    this.$router.push('/AdvertManagement')
@@ -116,7 +149,7 @@ export default {
 		    })
 		    .catch(req => {
 		    })
-        }
+        },
     }
 }
 </script>

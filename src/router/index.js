@@ -95,6 +95,11 @@ export const asyncRoutes = {
         name: 'AddArticle',
         component: () => import('../views/AddArticle.vue')
     },
+    'ResetArticle': {
+        path: '/ResetArticle',
+        name: 'ResetArticle',
+        component: () => import('../views/ResetArticle.vue')
+    },
     'RecycleBin': {
         path: '/RecycleBin',
         name: 'RecycleBin',
@@ -124,6 +129,11 @@ export const asyncRoutes = {
         path: '/AddAdvert',
         name: 'AddAdvert',
         component: () => import('../views/AddAdvert.vue')
+    },
+    'ResetAdvert': {
+        path: '/ResetAdvert',
+        name: 'ResetAdvert',
+        component: () => import('../views/ResetAdvert.vue')
     },
     'msg': {
         path: '/msg',

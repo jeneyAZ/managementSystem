@@ -218,10 +218,10 @@ export default {
                 this.crumbs = '404'
                 return
             }
-            if (to.name == 'AddArticle') {
+            if (to.name == 'ResetArticle') {
                 this.reloadPage()
             }
-            if (to.name == 'AddAdvert') {
+            if (to.name == 'ResetAdvert') {
                 this.reloadPage()
             }
             if (to.name == 'CommentDetail') {

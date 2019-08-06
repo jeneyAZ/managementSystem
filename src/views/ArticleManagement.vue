@@ -135,7 +135,7 @@ export default {
       console.log(id, 'id')
       sessionStorage.setItem('articleId',id)
       this.$router.push({
-        path: '/AddArticle',
+        path: '/ResetArticle',
         query: {
           id: id
         }

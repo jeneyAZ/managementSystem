@@ -34,6 +34,11 @@ const store = new Vuex.Store({
                     },
                     {
                         type: 'ios-grid',
+                        name: 'ResetArticle',
+                        text: '修改文章'
+                    },
+                    {
+                        type: 'ios-grid',
                         name: 'RecycleBin',
                         text: '回收站'
                     },
@@ -75,6 +80,10 @@ const store = new Vuex.Store({
                     type: 'ios-grid',
                     name: 'AddAdvert',
                     text: '添加广告'
+                }, {
+                    type: 'ios-grid',
+                    name: 'ResetAdvert',
+                    text: '修改广告'
                 }]
             }
         ],
