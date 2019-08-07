@@ -100,6 +100,7 @@ export default {
     },
     created() {
         this.getTag()
+        this.kindList = JSON.parse(localStorage.getItem('kindTxt'))
     },
     methods: {
         // 获取标签
