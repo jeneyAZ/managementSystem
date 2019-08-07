@@ -99,6 +99,7 @@ export default {
         }
     },
     created() {
+        this.kindList = JSON.parse(localStorage.getItem('kindTxt'))
         this.getTag()
     },
     methods: {

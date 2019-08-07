@@ -80,12 +80,10 @@ export default {
              this.adverId = sessionStorage.getItem('adverId')
          }
         this.getArticledetail()
-        console.log(this.status, 'status')
     },
     methods: {
         // 类型选择触发
         handleSelectKind (val) {
-            console.log(val, '456')
             this.model = val
         },
         // 文件上传

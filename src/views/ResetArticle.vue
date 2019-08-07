@@ -180,7 +180,7 @@ export default {
                    this.formItem.title = res.title
                    this.formItem.intro = res.intro
                    this.model = res.articleCategoryId
-                   this.shareUrl = res.shareUrl
+                   this.formItem.shareUrl = res.shareUrl
                    this.$Message.success(res.message)
                } else {
                    this.$Message.warning(res.message)

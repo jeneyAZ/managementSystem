@@ -33,9 +33,10 @@
                 </div>
             </div>
             <div class="copys">
-                <p>特别提示：</p>
+                <p>特别提示：请复制当前原链接分享</p>
+                <p class="pointer"><img src="../assets/imgs/pointer.gif" alt=""></p>
                 <!-- <Icon type="arrow-down-a"></Icon> -->
-                <h4>{{detailData.shareUrl}}</h4>
+                <!-- <h4>{{detailData.shareUrl}}</h4> -->
                 <el-button
                 v-clipboard:copy="detailData.shareUrl"
                 v-clipboard:success="onCopy"
@@ -196,6 +197,11 @@
  </script>
 
  <style scoped>
+.ql-align-center img{
+    width: 100% !important;
+    height: 300px;
+}
+ .copys .pointer img{width: 30%}
  .copys{
      text-align: center;
          margin: 15px 0px
@@ -213,7 +219,12 @@
     height: 100%;
     margin: 0 auto;
     position: relative;
-    overflow: scroll
+    overflow-y: scroll;
+    width: 100%;
+}
+.Browse img{
+    height: 300px;
+    width: 100%;
 }
 .head{
     position: fixed;
@@ -229,9 +240,6 @@
 }
 .contant{
     padding-top: 70px
-}
-.contant img{
-    width: 85%
 }
 .contant .title{
     font-size: 24px;
@@ -251,6 +259,9 @@
 .contant .articleBox{
     border-bottom: 1px solid #ececec;
     padding: 10px 7px
+}
+.articleBox img{
+    width: 85%
 }
 .opration{
     text-align: right;
