@@ -197,10 +197,6 @@
  </script>
 
  <style scoped>
-.ql-align-center img{
-    width: 100% !important;
-    height: 300px;
-}
  .copys .pointer img{width: 30%}
  .copys{
      text-align: center;
@@ -220,10 +216,6 @@
     margin: 0 auto;
     position: relative;
     overflow-y: scroll;
-    width: 100%;
-}
-.Browse img{
-    height: 300px;
     width: 100%;
 }
 .head{
@@ -262,6 +254,10 @@
 }
 .articleBox img{
     width: 85%
+}
+.articleBox img{
+ height: auto !important;
+ width: 100% !important
 }
 .opration{
     text-align: right;
