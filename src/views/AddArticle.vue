@@ -23,6 +23,7 @@
                     </div>
                 </template>
             </Form-item>
+            <div class="tip"><span>* 文本编辑框上传图片宽度请按照使用机型宽度上传</span></div>
             <div class="edit_container">
                <quill-editor
                     v-model="content"
@@ -191,6 +192,10 @@ export default {
 </script>
 
 <style scoped>
+.tip{
+    margin-top: 20px;color: red;
+    margin-bottom: 5px
+}
 .ivu-form-item{
     width: 40%
 }

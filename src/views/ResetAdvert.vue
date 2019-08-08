@@ -155,6 +155,10 @@ export default {
 </script>
 
 <style scoped>
+.tip{
+    margin-top: 20px;color: red;
+    margin-bottom: 5px
+}
 .ivu-form-item{
     width: 40%
 }
